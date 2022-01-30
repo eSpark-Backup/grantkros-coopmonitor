@@ -1,0 +1,61 @@
+Removed Pin From Net: NetName=GND Pin=J3-MH1
+Removed Pin From Net: NetName=GND Pin=J3-MH2
+Removed Pin From Net: NetName=GND Pin=J3-MH3
+Removed Pin From Net: NetName=GND Pin=J3-MH4
+Removed Pin From Net: NetName=VBAT_IN Pin=QF1-4
+Change Component Description : Designator=L1 Old Description=10uH ±20% 1.6A 230mO SMD,4.75x4.2x2mm Inductors (SMD) RoHS New Description=10uH ±20% 1.6A 230mO SMD,4.75x4.2x2mm Inductors (SMD) RoHS
+Change Component Description : Designator=LZ Old Description=10uH ±20% 1.6A 230mO SMD,4.75x4.2x2mm Inductors (SMD) RoHS New Description=10uH ±20% 1.6A 230mO SMD,4.75x4.2x2mm Inductors (SMD) RoHS
+Change Component Description : Designator=R20 Old Description=15K ±5% 1/10W ±200ppm/? 0402 Chip Resistor - Surface Mount RoHS New Description=15K ±5% 1/10W ±200ppm/? 0402 Chip Resistor - Surface Mount RoHS
+Change Component Description : Designator=L2 Old Description=15uH ±20% 2.5A 56mO SMD,8.0x8.0mm Inductors (SMD) RoHS New Description=15uH ±20% 2.5A 56mO SMD,8.0x8.0mm Inductors (SMD) RoHS
+Added Component: Designator=J2(DC-005-5A-2.5-SMT)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Manufacturer"; Value = "XKB Enterprise"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part No"; Value = "DC-005-5A-2.5-SMT"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "Custom"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "Custom"; VariantName = "[No Variations]"
+Added Component: Designator=P3(TEST POINT)
+Add component. Clean all parameters for all variants
+Added Component: Designator=RS2(Res0402)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Case/Package"; Value = "0402"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Case Code (Imperial)"; Value = "0402"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Case Code (Metric)"; Value = "1005"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "https://www.verical.com/server-webapp/html/getDatasheet?partID=89073&src-supplier=Verical"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "https://www.verical.com/server-webapp/html/getDatasheet?partID=89073&src-supplier=Verical"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Composition"; Value = "Thick Film"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Depth"; Value = "0.5mm"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Height"; Value = "0.35mm"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Lead Free"; Value = "Lead Free"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Length"; Value = "1mm"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "KOA Speer"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "RK73B1ETTP103J"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Max Operating Temperature"; Value = "155°C"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Military Standard"; Value = "Not"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Min Operating Temperature"; Value = "-55°C"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mount"; Value = "Surface Mount"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package Quantity"; Value = "10000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Packaging"; Value = "Tape and Reel"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Power Rating"; Value = "63mW"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Pricing 1"; Value = "1=0.1, 10=0.016, 100=0.0065, 1000=0.00292, 2500=0.00253, 5000=0.00209 (USD)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Resistance"; Value = "10kR"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Stock 1"; Value = "2917894"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 1"; Value = "Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 1"; Value = "2019-RK73B1ETTP103JCT-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Temperature Coefficient"; Value = "200ppm/°C"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Termination"; Value = "SMD/SMT"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Tolerance"; Value = "5%"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Voltage Rating"; Value = "50V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Voltage Rating (DC)"; Value = "50V"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Width"; Value = "0.5mm"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=CHG_IN Pin=J2-1
+Added Pin To Net: NetName=CHG_IN Pin=J2-1
+Added Pin To Net: NetName=GND Pin=J2-2
+Added Pin To Net: NetName=GND Pin=J2-3
+Added Pin To Net: NetName=VDD_EXT Pin=P3-1
+Added Pin To Net: NetName=3V3 Pin=RS2-1
+Added Pin To Net: NetName=RXD Pin=RS2-2
+Added Member To Class: ClassName=U_Connector_Section Member=Component J2 DC-005-5A-2.5-SMT
+Added Member To Class: ClassName=U_3G Modem_Section Member=Component LED3 TJ-S1005SW4TGLC6B-A5
+Added Member To Class: ClassName=U_3G Modem_Section Member=Component LED4 TJ-S1005SW4TGLC7K-A5
+Added Member To Class: ClassName=U_3G Modem_Section Member=Component P3 Test Point
+Added Member To Class: ClassName=U_Controller_Section Member=Component RS2 10K

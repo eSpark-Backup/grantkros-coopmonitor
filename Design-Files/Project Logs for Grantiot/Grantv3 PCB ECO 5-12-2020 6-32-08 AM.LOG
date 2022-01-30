@@ -1,0 +1,12 @@
+Added Component: Designator=SB_AD(Solder Bridge)
+Add component. Clean all parameters for all variants
+Added Component: Designator=SB_ZD(Solder Bridge)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=EN_AD Pin=SB_AD-1
+Added Pin To Net: NetName=EN_ZD Pin=SB_ZD-1
+Added Pin To Net: NetName=NetQ7_3 Pin=Q7-3
+Added Pin To Net: NetName=NetQ7_3 Pin=SB_AD-2
+Added Pin To Net: NetName=NetQ7_3 Pin=SB_ZD-2
+Added Net: Name=NetQ7_3
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component SB_AD Solder Bridge
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component SB_ZD Solder Bridge

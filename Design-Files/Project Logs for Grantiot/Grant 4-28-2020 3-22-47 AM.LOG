@@ -1,0 +1,5 @@
+Added Component: Designator=P17(Solder Pads)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=VBAT_M Pin=P17-1
+Added Pin To Net: NetName=GND Pin=P17-2
+Added Member To Class: ClassName=U_Connector_Section Member=Component P17 Solder Pads

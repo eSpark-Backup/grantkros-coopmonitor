@@ -1,0 +1,12 @@
+Removed Pin From Net: NetName=VBAT_IN Pin=J2-1
+Added Component: Designator=S1(SS-12D06L5)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Manufacturer"; Value = "XKB Enterprise"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part No"; Value = "SS-12D06L5"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "Custom"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "Custom"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=VBAT_IN Pin=S1-1
+Added Pin To Net: NetName=VBAT_M Pin=J2-1
+Added Pin To Net: NetName=VBAT_M Pin=S1-2
+Added Net: Name=VBAT_M
+Added Member To Class: ClassName=U_Connector_Section Member=Component S1 SS-12D06L5

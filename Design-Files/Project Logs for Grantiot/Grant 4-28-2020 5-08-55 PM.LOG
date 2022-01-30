@@ -1,0 +1,9 @@
+Added Component: Designator=RF1(RES 0805)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Manufacturer"; Value = "UNI-ROYAL(Uniroyal Elec)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part No"; Value = "0805W4F680MT5E"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "0805"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "0.068R"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=SNS_ Pin=RF1-1
+Added Pin To Net: NetName=CHG_IN Pin=RF1-2
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component RF1 0.068R

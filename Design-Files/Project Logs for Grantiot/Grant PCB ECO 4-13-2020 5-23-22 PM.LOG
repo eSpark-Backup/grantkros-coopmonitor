@@ -1,0 +1,29 @@
+Added Component: Designator=J6(CR1220-2)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Manufacturer"; Value = "Q&J"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part No"; Value = "CR1220-2"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "Cuctom"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "Cuctom"; VariantName = "[No Variations]"
+Added Component: Designator=J7(WJ301V-5.0-3P)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Manufacturer"; Value = "Ningbo Kangnex Elec"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part No"; Value = "WJ301V-5.0-3P"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "Custom"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "Custom"; VariantName = "[No Variations]"
+Added Component: Designator=J8(WJ301V-5.0-2P)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Manufacturer"; Value = "Ningbo Kangnex Elec"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part No"; Value = "WJ301V-5.0-2P"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "Custom"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "Custom"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=COIN_VBAT Pin=J6-1
+Added Pin To Net: NetName=GND Pin=J6-2
+Added Pin To Net: NetName=12V Pin=J7-1
+Added Pin To Net: NetName=SENS_IN Pin=J7-2
+Added Pin To Net: NetName=GND Pin=J7-3
+Added Pin To Net: NetName=OUT_1 Pin=J8-1
+Added Pin To Net: NetName=OUT_2 Pin=J8-2
+Added Member To Class: ClassName=U_Connector_Section Member=Component J6 CR1220-2
+Added Member To Class: ClassName=U_Connector_Section Member=Component J7 WJ301V-5.0-3P
+Added Member To Class: ClassName=U_Connector_Section Member=Component J8 WJ301V-5.0-2P
+Added Member To Class: ClassName=U_Power_Section Member=Component P1 61300211121

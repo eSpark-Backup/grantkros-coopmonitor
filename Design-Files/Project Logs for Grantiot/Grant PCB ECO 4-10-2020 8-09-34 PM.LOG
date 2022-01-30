@@ -1,0 +1,35 @@
+Change Component Description : Designator=L1 Old Description=10uH ±20% 1.6A 230mO SMD,4.75x4.2x2mm Inductors (SMD) RoHS New Description=10uH ±20% 1.6A 230mO SMD,4.75x4.2x2mm Inductors (SMD) RoHS
+Change Component Description : Designator=R6 Old Description=15K ±5% 1/10W ±200ppm/? 0402 Chip Resistor - Surface Mount RoHS New Description=15K ±5% 1/10W ±200ppm/? 0402 Chip Resistor - Surface Mount RoHS
+Change Component Description : Designator=R20 Old Description=15K ±5% 1/10W ±200ppm/? 0402 Chip Resistor - Surface Mount RoHS New Description=15K ±5% 1/10W ±200ppm/? 0402 Chip Resistor - Surface Mount RoHS
+Change Component Description : Designator=X1 Old Description=32.768KHz ±20ppm 9pF 90kO SMD-2012_2P SMD Crystal Resonators RoHS New Description=32.768KHz ±20ppm 9pF 90kO SMD-2012_2P SMD Crystal Resonators RoHS
+Added Component: Designator=J6(3002TR)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Body Material"; Value = "Bronze"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Case/Package"; Value = "SMD/SMT"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Color"; Value = "Silver"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "http://www.keyelco.com/userAssets/file/M60-2p7.pdf?src-supplier=Future+Electronics"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "http://www.keyelco.com/userAssets/file/M60-2p7.pdf?src-supplier=Future+Electronics"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2Description"; Value = "http://www.keyelco.com/product-pdf.cfm?p=4037&src-supplier=Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2URL"; Value = "http://www.keyelco.com/product-pdf.cfm?p=4037&src-supplier=Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Connector Type"; Value = "SMD/SMT"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Diameter"; Value = "20mm"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Lead Free"; Value = "Lead Free"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "Keystone Electronics"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "3002TR"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Material"; Value = "Bronze"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mount"; Value = "Surface Mount,PCB"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Number of Batteries"; Value = "1"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Number of Cells"; Value = "1"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package Quantity"; Value = "500"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Packaging"; Value = "Tape and Reel"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Pricing 1"; Value = "1=0.98, 25=0.8624, 100=0.6848, 250=0.6304 (USD)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "REACH SVHC"; Value = "No SVHC"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Stock 1"; Value = "42943"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 1"; Value = "Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 1"; Value = "36-3002CT-ND"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Termination"; Value = "SMD/SMT"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=COIN_VBAT Pin=J6-1
+Added Pin To Net: NetName=COIN_VBAT Pin=J6-2
+Added Pin To Net: NetName=GND Pin=J6-3
+Added Member To Class: ClassName=U_Connector_Section Member=Component J6 3002TR
+Added Member To Class: ClassName=U_Controller_Section Member=Component SW1 B3U-1000P

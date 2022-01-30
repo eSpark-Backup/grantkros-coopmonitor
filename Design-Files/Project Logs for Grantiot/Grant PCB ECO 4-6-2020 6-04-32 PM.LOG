@@ -1,0 +1,8 @@
+Change Component Description : Designator=L1 Old Description=10uH ±20% 1.6A 230mO SMD,4.75x4.2x2mm Inductors (SMD) RoHS New Description=10uH ±20% 1.6A 230mO SMD,4.75x4.2x2mm Inductors (SMD) RoHS
+Change Component Description : Designator=R6 Old Description=15K ±5% 1/10W ±200ppm/? 0402 Chip Resistor - Surface Mount RoHS New Description=15K ±5% 1/10W ±200ppm/? 0402 Chip Resistor - Surface Mount RoHS
+Change Component Description : Designator=R20 Old Description=15K ±5% 1/10W ±200ppm/? 0402 Chip Resistor - Surface Mount RoHS New Description=15K ±5% 1/10W ±200ppm/? 0402 Chip Resistor - Surface Mount RoHS
+Change Component Description : Designator=X1 Old Description=32.768KHz ±20ppm 9pF 90kO SMD-2012_2P SMD Crystal Resonators RoHS New Description=32.768KHz ±20ppm 9pF 90kO SMD-2012_2P SMD Crystal Resonators RoHS
+Added Component: Designator=P12(TEST POINT)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=GND Pin=P12-1
+Added Member To Class: ClassName=U_Connector_Section Member=Component P12 Test Point

@@ -1,0 +1,9 @@
+Added Component: Designator=J6(CR1220-2)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Manufacturer"; Value = "Q&J"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part No"; Value = "CR1220-2"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "Cuctom"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "Cuctom"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=COIN_VBAT Pin=J6-1
+Added Pin To Net: NetName=GND Pin=J6-2
+Added Member To Class: ClassName=U_Connector_Section Member=Component J6 CR1220-2

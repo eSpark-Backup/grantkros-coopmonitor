@@ -1,0 +1,24 @@
+Added Component: Designator=J3(C10418)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "http://www.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf?src-supplier=Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "http://www.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf?src-supplier=Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2Description"; Value = "https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf?src-supplier=Mouser"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2URL"; Value = "https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf?src-supplier=Mouser"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink3Description"; Value = "https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf?src-supplier=Verical"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink3URL"; Value = "https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf?src-supplier=Verical"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Connector Type"; Value = "USB,Receptacle"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Gender"; Value = "Receptacle"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Link"; Value = "https://lcsc.com/product-detail/USB-Connectors_Jing-Extension-of-the-Electronic-Co-C10418_C10418.html"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "Jing Extension of the Electronic Co."; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "C10418"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Mount"; Value = "Surface Mount,Horizontal"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Number of Contacts"; Value = "5"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Number of Ports"; Value = "1"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Number of Terminals"; Value = "5"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Orientation"; Value = "Right Angle"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Termination"; Value = "Solder"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=VUSB Pin=J3-1
+Added Pin To Net: NetName=D- Pin=J3-2
+Added Pin To Net: NetName=D+ Pin=J3-3
+Added Pin To Net: NetName=GND Pin=J3-5
+Added Member To Class: ClassName=U_Connector_Section Member=Component J3 C10418

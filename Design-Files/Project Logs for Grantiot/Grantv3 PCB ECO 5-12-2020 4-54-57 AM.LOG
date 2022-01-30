@@ -1,0 +1,14 @@
+Removed Pin From Net: NetName=3V3 Pin=L1-1
+Removed Pin From Net: NetName=3V3 Pin=LZ-1
+Removed Pin From Net: NetName=3V3 Pin=RB1-2
+Removed Pin From Net: NetName=3V3 Pin=RZ-2
+Added Pin To Net: NetName=3V3AD Pin=L1-1
+Added Pin To Net: NetName=3V3AD Pin=RB1-2
+Added Pin To Net: NetName=3V3AD Pin=SB5-2
+Added Pin To Net: NetName=3V3AD Pin=U9-5
+Added Net: Name=3V3AD
+Added Pin To Net: NetName=3V3ZD Pin=LZ-1
+Added Pin To Net: NetName=3V3ZD Pin=RZ-2
+Added Pin To Net: NetName=3V3ZD Pin=SB6-2
+Added Pin To Net: NetName=3V3ZD Pin=UF2-5
+Added Net: Name=3V3ZD

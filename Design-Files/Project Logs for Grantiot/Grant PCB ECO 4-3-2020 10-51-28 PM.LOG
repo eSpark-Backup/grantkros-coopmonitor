@@ -1,0 +1,118 @@
+Change Component Footprint: Designator=J3 Old Footprint=10118194-0001LF New Footprint=C10418
+Change Component Comment : Designator=J3 Old Comment=10118194-0001LF New Comment=C10418
+Change component parameters: Designator = "J3"; Footprint = "C10418"; UniqueID = "\FFHTNOKR\UCVJLWIV"
+Change component parameters. Clean all parameters for all variants
+Change component parameters (AddParameter): Name = "ComponentLink1Description"; Value = "http://www.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf?src-supplier=Digi-Key"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "ComponentLink1URL"; Value = "http://www.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf?src-supplier=Digi-Key"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "ComponentLink2Description"; Value = "https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf?src-supplier=Mouser"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "ComponentLink2URL"; Value = "https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf?src-supplier=Mouser"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "ComponentLink3Description"; Value = "https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf?src-supplier=Verical"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "ComponentLink3URL"; Value = "https://cdn.amphenol-icc.com/media/wysiwyg/files/drawing/10118194.pdf?src-supplier=Verical"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Connector Type"; Value = "USB,Receptacle"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Gender"; Value = "Receptacle"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Link"; Value = "https://lcsc.com/product-detail/USB-Connectors_Jing-Extension-of-the-Electronic-Co-C10418_C10418.html"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacturer"; Value = "Jing Extension of the Electronic Co."; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacturer Part Number"; Value = "C10418"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Mount"; Value = "Surface Mount,Horizontal"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Number of Contacts"; Value = "5"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Number of Ports"; Value = "1"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Number of Terminals"; Value = "5"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Orientation"; Value = "Right Angle"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Termination"; Value = "Solder"; VariantName = "[No Variations]"
+Added Component: Designator=J1(U.FL-R-SMT-1(80))
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Case/Package"; Value = "SMD/SMT"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1Description"; Value = "https://www.hirose.com/product/en/download_file/key_name/U.FL-R-SMT-1%2880%29/category/Specification%20Sheet/doc_file_id/37638/?file_category_id=9&item_id=03310472280&is_series=&src-supplier=Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink1URL"; Value = "https://www.hirose.com/product/en/download_file/key_name/U.FL-R-SMT-1%2880%29/category/Specification%20Sheet/doc_file_id/37638/?file_category_id=9&item_id=03310472280&is_series=&src-supplier=Digi-Key"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2Description"; Value = "http://www.mouser.com/ds/2/185/U.FL_catalog-939761.pdf?src-supplier=Mouser"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "ComponentLink2URL"; Value = "http://www.mouser.com/ds/2/185/U.FL_catalog-939761.pdf?src-supplier=Mouser"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Lead Free"; Value = "Lead Free"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer"; Value = "Hirose"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part Number"; Value = "U.FL-R-SMT-1(80)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package Quantity"; Value = "10000"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Packaging"; Value = "Tape and Reel"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Pricing 1"; Value = "1=1.07, 500=0.785, 1500=0.74, 2500=0.72, 5000=0.695 (USD)"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Stock 1"; Value = "1272"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier 1"; Value = "Future Electronics"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Supplier Part Number 1"; Value = "U.FL-R-SMT-1(80)-CUTT"; VariantName = "[No Variations]"
+Added Component: Designator=L1(MS0420-100M)
+Add component. Clean all parameters for all variants
+Add component (AddParameter): Name = "Manufacturer"; Value = "COILMX"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Manufacturer Part No"; Value = "MS0420-100M"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Package"; Value = "Custom"; VariantName = "[No Variations]"
+Add component (AddParameter): Name = "Value"; Value = "10uH"; VariantName = "[No Variations]"
+Added Component: Designator=U6(UTC15)
+Add component. Clean all parameters for all variants
+Added Pin To Net: NetName=ANT_M Pin=J1-1
+Added Pin To Net: NetName=GND Pin=J1-2
+Added Pin To Net: NetName=GND Pin=J1-3
+Added Pin To Net: NetName=3V3 Pin=L1-1
+Added Pin To Net: NetName=SW_ Pin=L1-2
+Added Pin To Net: NetName=NETLIGHT_ Pin=U6-6
+Added Pin To Net: NetName=VDD_EXT Pin=U6-7
+Added Pin To Net: NetName=#U_GND Pin=U6-8
+Added Pin To Net: NetName=#U_VDD Pin=U6-12
+Added Pin To Net: NetName=#U_DATA Pin=U6-13
+Added Pin To Net: NetName=#U_CLK Pin=U6-14
+Added Pin To Net: NetName=#U_RST Pin=U6-15
+Added Pin To Net: NetName=RESET_N Pin=U6-17
+Added Pin To Net: NetName=PWRKEY_1 Pin=U6-18
+Added Pin To Net: NetName=GND Pin=U6-19
+Added Pin To Net: NetName=GND Pin=U6-42
+Added Pin To Net: NetName=ANT_M Pin=U6-43
+Added Pin To Net: NetName=GND Pin=U6-44
+Added Pin To Net: NetName=GND Pin=U6-45
+Added Pin To Net: NetName=GND Pin=U6-46
+Added Pin To Net: NetName=GND Pin=U6-47
+Added Pin To Net: NetName=GND Pin=U6-48
+Added Pin To Net: NetName=GND Pin=U6-49
+Added Pin To Net: NetName=VBAT Pin=U6-50
+Added Pin To Net: NetName=VBAT Pin=U6-51
+Added Pin To Net: NetName=VBAT Pin=U6-52
+Added Pin To Net: NetName=VBAT Pin=U6-53
+Added Pin To Net: NetName=STATUS_ Pin=U6-54
+Added Pin To Net: NetName=!TXD Pin=U6-60
+Added Pin To Net: NetName=!RXD Pin=U6-61
+Added Pin To Net: NetName=GSM_D+ Pin=U6-62
+Added Pin To Net: NetName=GSM_D- Pin=U6-63
+Added Pin To Net: NetName=VUSB Pin=U6-64
+Added Pin To Net: NetName=GND Pin=U6-65
+Added Pin To Net: NetName=GND Pin=U6-67
+Added Pin To Net: NetName=GND Pin=U6-68
+Added Pin To Net: NetName=GND Pin=U6-81
+Added Pin To Net: NetName=GND Pin=U6-82
+Added Pin To Net: NetName=GND Pin=U6-83
+Added Pin To Net: NetName=GND Pin=U6-84
+Added Pin To Net: NetName=GND Pin=U6-85
+Added Pin To Net: NetName=GND Pin=U6-86
+Added Pin To Net: NetName=GND Pin=U6-87
+Added Pin To Net: NetName=GND Pin=U6-88
+Added Pin To Net: NetName=GND Pin=U6-89
+Added Pin To Net: NetName=GND Pin=U6-90
+Added Pin To Net: NetName=GND Pin=U6-91
+Added Pin To Net: NetName=GND Pin=U6-92
+Added Pin To Net: NetName=GND Pin=U6-93
+Added Pin To Net: NetName=GND Pin=U6-94
+Added Pin To Net: NetName=GND Pin=U6-95
+Added Pin To Net: NetName=GND Pin=U6-96
+Added Pin To Net: NetName=GND Pin=U6-97
+Added Pin To Net: NetName=GND Pin=U6-98
+Added Pin To Net: NetName=GND Pin=U6-99
+Added Pin To Net: NetName=GND Pin=U6-100
+Added Pin To Net: NetName=GND Pin=U6-101
+Added Pin To Net: NetName=GND Pin=U6-102
+Added Pin To Net: NetName=GND Pin=U6-103
+Added Pin To Net: NetName=GND Pin=U6-104
+Added Pin To Net: NetName=GND Pin=U6-105
+Added Pin To Net: NetName=GND Pin=U6-106
+Added Pin To Net: NetName=GND Pin=U6-107
+Added Pin To Net: NetName=GND Pin=U6-108
+Added Member To Class: ClassName=U_3G Modem_Section Member=Component J1 U.FL-R-SMT-1(80)
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component L1 MS0420-100M
+Added Member To Class: ClassName=U_3G Modem_Section Member=Component U6 UC15
+Added Room: Name=U_3G Modem_Section
+Added Room: Name=U_Battery_Management_Section
+Added Room: Name=U_Connector_Section
+Added Room: Name=U_Controller_Section
+Added Room: Name=U_Peripheral_Section
+Added Room: Name=U_Power_Section
