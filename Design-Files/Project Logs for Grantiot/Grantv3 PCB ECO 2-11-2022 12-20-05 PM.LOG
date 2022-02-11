@@ -1,0 +1,108 @@
+Removed Member From Class: ClassName=U_Connector_Section Member=C6
+Removed Member From Class: ClassName=U_Controller_Section Member=C10
+Removed Member From Class: ClassName=U_Audio_Amplifier_Section Member=C18
+Removed Member From Class: ClassName=U_Power_Section Member=C18
+Removed Member From Class: ClassName=U_Battery_Management_Section Member=C?
+Removed Member From Class: ClassName=U_Power_Section Member=C?
+Removed Member From Class: ClassName=U_Connector_Section Member=D2
+Removed Member From Class: ClassName=U_Power_Section Member=D2
+Removed Member From Class: ClassName=U_Audio_Amplifier_Section Member=J3
+Removed Member From Class: ClassName=U_Peripheral_Section Member=J8
+Removed Member From Class: ClassName=U_Battery_Management_Section Member=J#1
+Removed Member From Class: ClassName=U_Peripheral_Section Member=P17
+Removed Member From Class: ClassName=U_Power_Section Member=R4
+Removed Member From Class: ClassName=U_Connector_Section Member=R13
+Removed Member From Class: ClassName=U_Connector_Section Member=R15
+Removed Member From Class: ClassName=U_Connector_Section Member=R16
+Removed Member From Class: ClassName=U_Battery_Management_Section Member=RZ1
+Removed Member From Class: ClassName=U_Audio_Amplifier_Section Member=SB3
+Removed Member From Class: ClassName=U_Connector_Section Member=SB3
+Added Member To Class: ClassName=U_Power_Section Member=Component C1 0.1uF
+Added Member To Class: ClassName=U_Power_Section Member=Component C2 1uF
+Added Member To Class: ClassName=U_Power_Section Member=Component C3 0.1uF
+Added Member To Class: ClassName=U_Power_Section Member=Component C5 10nF
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component C6 0.1uF
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component C7 22uF
+Added Member To Class: ClassName=U_Audio_Amplifier_Section Member=Component C8 1UF
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component C10 0.1uF
+Added Member To Class: ClassName=U_Controller_Section Member=Component C11 0.1uF
+Added Member To Class: ClassName=U_Controller_Section Member=Component C13 0.1uF
+Added Member To Class: ClassName=U_Controller_Section Member=Component C15 0.1uF
+Added Member To Class: ClassName=U_Controller_Section Member=Component C17 20pF
+Added Member To Class: ClassName=U_Controller_Section Member=Component C18 0.1uF
+Added Member To Class: ClassName=U_Audio_Amplifier_Section Member=Component C19 1UF
+Added Member To Class: ClassName=U_Connector_Section Member=Component C29 0.1uF
+Added Member To Class: ClassName=U_Connector_Section Member=Component C30 0.1uF
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component CF1 220pF
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component CF2 0.1uF
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component CR1 2.2uF
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component CX1 20pF
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component CX2 20pF
+Added Member To Class: ClassName=U_Power_Section Member=Component D1 PMEG3010ER,115
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component D2 PMEG3010ER,115
+Added Member To Class: ClassName=U_Connector_Section Member=Component J2 DC-005-5A-2.5-SMT
+Added Member To Class: ClassName=U_Connector_Section Member=Component J3 C10418
+Added Member To Class: ClassName=U_Connector_Section Member=Component J4 20021121-00010C4LF
+Added Member To Class: ClassName=U_Connector_Section Member=Component J5 TC2050-IDC
+Added Member To Class: ClassName=U_Connector_Section Member=Component J6 CR1220-2
+Added Member To Class: ClassName=U_Connector_Section Member=Component J7 WJ301V-5.0-3P
+Added Member To Class: ClassName=U_Connector_Section Member=Component J8 WJ301V-5.0-2P
+Added Member To Class: ClassName=U_Power_Section Member=Component LED1 TJ-S1005SW4TGLC2R-A5
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component LED2 TJ-S1005SW4TGLC2R-A5
+Added Member To Class: ClassName=U_Power_Section Member=Component P1 61300211121
+Added Member To Class: ClassName=U_Power_Section Member=Component P2 TEST POINT
+Added Member To Class: ClassName=U_Connector_Section Member=Component P12 Test Point
+Added Member To Class: ClassName=U_Connector_Section Member=Component P13 Test Point
+Added Member To Class: ClassName=U_Connector_Section Member=Component P14 Test Point
+Added Member To Class: ClassName=U_Connector_Section Member=Component P15 Test Point
+Added Member To Class: ClassName=U_Connector_Section Member=Component P16 Test Point
+Added Member To Class: ClassName=U_Connector_Section Member=Component P17 JST Connector
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component Q2 PMV65XP,215
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component QF1 NZT660A
+Added Member To Class: ClassName=U_Power_Section Member=Component R1 470R
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component R5 2K
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component R6 80.6K
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component R7 30.9K
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component R8 20K
+Added Member To Class: ClassName=U_Controller_Section Member=Component R9 20K
+Added Member To Class: ClassName=U_Audio_Amplifier_Section Member=Component R10 20K
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component R11 10K
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component R12 40.2K
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component R13 133K
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component R14 49.9K
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component R16 10K
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component R17 10K
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component RF1 0.068R
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component RF2 1K
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component RF3 1M
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component RF4 1M
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component RF5 118K
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component RF6 13.3K
+Added Member To Class: ClassName=U_Connector_Section Member=Component RF22 0R
+Added Member To Class: ClassName=U_Connector_Section Member=Component RF23 0R
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component RP1 60.4K
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component RP2 20K
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component RP3 62K
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component RP4 40.2K
+Added Member To Class: ClassName=U_Connector_Section Member=Component S1 SS-12D11L5
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component SB2 Solder Bridge
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component SB4 Solder Bridge
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component SB5 Solder Bridge
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component SB14 Solder Bridge
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component SB15 Solder Bridge
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component SB16 Solder Bridge
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component SB17 Solder Bridge
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component SB18 Solder Bridge
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component SB19 Solder Bridge
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component SB20 Solder Bridge
+Added Member To Class: ClassName=U_Controller_Section Member=Component SW1 B3U-1000P
+Added Member To Class: ClassName=U_Power_Section Member=Component U1 NCP3335ADM330R2G
+Added Member To Class: ClassName=U_Connector_Section Member=Component U2 SP3014-02UTG
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component U3 TLV431BFTA
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component U4 LM393DT
+Added Member To Class: ClassName=U_Controller_Section Member=Component U5 SAMD21G18A-AUT
+Added Member To Class: ClassName=U_Audio_Amplifier_Section Member=Component U6 LM4890MX/NOPB
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component U8 MCP7940N-I/SN
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component UF1 BQ2057WSNTR
+Added Member To Class: ClassName=U_Peripheral_Section Member=Component UF2 LMR62014XMF/NOPB
+Added Member To Class: ClassName=U_Controller_Section Member=Component X1 NX3215SA-32.768K-STD-MUA-8
