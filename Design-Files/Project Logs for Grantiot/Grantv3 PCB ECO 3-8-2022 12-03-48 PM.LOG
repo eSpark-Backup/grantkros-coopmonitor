@@ -1,0 +1,16 @@
+Removed Pin From Net: NetName=12V Pin=C34-1
+Removed Pin From Net: NetName=12V Pin=C35-1
+Removed Pin From Net: NetName=12V Pin=J1-23
+Removed Pin From Net: NetName=12V Pin=Q1-3
+Change Component Footprint: Designator=D2 Old Footprint=SOD123W New Footprint=SOD-123F
+Change Component Comment : Designator=D2 Old Comment=PMEG3010ER,115 New Comment=RB060M-30TR
+Change component parameters: Designator = "D2" ("D2"); Footprint = "SOD123W"; UniqueID = "\JLGRKDHR\UVDJVXNE" ("\JLGRKDHR\UVDJVXNE")
+Change component parameters (AddParameter): Name = "ComponentLink1Description"; Value = "New link"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "ComponentLink1URL"; Value = "https://www.digikey.com/en/products/detail/rohm-semiconductor/RB060M-30TR/2336619?s=N4IgTCBcDaIEoCEAMA2JBZAtAZiQFThAF0BfIA"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacture Part no"; Value = "RB060M-30TR"; VariantName = "[No Variations]"
+Change component parameters (AddParameter): Name = "Manufacturer"; Value = "Rohm Semiconductor"; VariantName = "[No Variations]"
+Added Pin To Net: NetName=VDD Pin=C34-1
+Added Pin To Net: NetName=VDD Pin=C35-1
+Added Pin To Net: NetName=VDD Pin=J1-23
+Added Pin To Net: NetName=VDD Pin=Q1-3
+Added Net: Name=VDD
