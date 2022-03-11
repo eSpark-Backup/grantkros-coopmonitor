@@ -1,0 +1,4 @@
+Removed Member From Class: ClassName=U_OLED_Section Member=R31
+Added Member To Class: ClassName=U_OLED_Section Member=Component J1 C35445
+Added Member To Class: ClassName=U_Controller_Section Member=Component R6 10K
+Added Member To Class: ClassName=U_Battery_Management_Section Member=Component RP1 10K5
