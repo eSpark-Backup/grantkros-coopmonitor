@@ -1,0 +1,32 @@
+Altium Designer Pick and Place Locations
+E:\Git\GrantKros-CoopMonitor\Interface-Board\Pick Place for Interface_PCB.txt
+
+========================================================================================================================
+File Design Information:
+
+Date:       21/03/22
+Time:       13:43
+Revision:   Not in VersionControl
+Variant:    No variations
+Units used: mil
+
+Designator Layer       Center-X(mil) Center-Y(mil) Rotation Ref-X(mil)  Ref-Y(mil)  Pad-X(mil)  Pad-Y(mil)  
+SW4        TopLayer    293,533mil    373,127mil    180      293,533mil  373,127mil  588,808mil  274,702mil  
+SW3        TopLayer    293,533mil    1374,702mil   180      293,533mil  1374,702mil 588,808mil  1276,277mil 
+SW2        TopLayer    3515,533mil   373,127mil    180      3515,533mil 373,127mil  3810,808mil 274,702mil  
+SW1        TopLayer    3515,533mil   1374,702mil   180      3515,533mil 1374,702mil 3810,808mil 1276,277mil 
+R27        BottomLayer 1965,454mil   801,127mil    90       1965,454mil 801,127mil  1965,454mil 782,627mil  
+R23        BottomLayer 1757,548mil   801,127mil    180      1757,548mil 801,127mil  1787,548mil 801,127mil  
+R22        BottomLayer 1896,533mil   801,127mil    90       1896,533mil 801,127mil  1896,533mil 782,627mil  
+R21        BottomLayer 1855,533mil   801,127mil    90       1855,533mil 801,127mil  1855,533mil 782,627mil  
+P1         BottomLayer 1903,218mil   1777,127mil   180      2353,218mil 1777,127mil 2353,218mil 1777,127mil 
+J1         BottomLayer 1895,343mil   638,344mil    180      1895,344mil 638,344mil  2121,722mil 676,434mil  
+C35        BottomLayer 1615,533mil   780,919mil    90       1615,533mil 780,919mil  1615,533mil 762,419mil  
+C34        BottomLayer 1567,533mil   785,962mil    90       1567,533mil 785,962mil  1567,533mil 755,962mil  
+C33        BottomLayer 1670,151mil   796,127mil    180      1670,151mil 796,127mil  1688,651mil 796,127mil  
+C32        BottomLayer 2071,348mil   777,041mil    360      2071,348mil 777,041mil  2052,848mil 777,041mil  
+C28        BottomLayer 2071,348mil   816,127mil    360      2071,348mil 816,127mil  2052,848mil 816,127mil  
+C4         BottomLayer 589,438mil    453,375mil    270      589,438mil  453,375mil  589,438mil  471,875mil  
+C3         BottomLayer 589,438mil    1454,545mil   270      589,438mil  1454,545mil 589,438mil  1473,045mil 
+C2         BottomLayer 3810,533mil   454,541mil    270      3810,533mil 454,541mil  3810,533mil 473,041mil  
+C1         BottomLayer 3810,533mil   1454,620mil   270      3810,533mil 1454,620mil 3810,533mil 1473,120mil 

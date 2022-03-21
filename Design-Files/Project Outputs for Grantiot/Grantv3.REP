@@ -2,54 +2,6 @@
 FileName = Grantv3.GBR
 AutoAperture = True
 *************************************************************
-Generating : Bottom Paste
-      File : Grantv3.GBP
-
-    Adding Layer      : Bottom Paste
-
-    Adding Layer      : Bottom Layer
-
-    Adding Layer      : Multi-Layer
-
-
-Used DCodes :
-    D24
-    D25
-    D35
-    D39
-    D40
-    D41
-    D222
-    D223
-*************************************************************
-
-*************************************************************
-Generating : Bottom Pad Master
-      File : Grantv3.GPB
-
-    Adding Layer      : Bottom Layer
-
-    Adding Layer      : Multi-Layer
-
-
-Used DCodes :
-    D24
-    D25
-    D35
-    D39
-    D40
-    D41
-    D215
-    D216
-    D217
-    D218
-    D219
-    D220
-    D222
-    D223
-*************************************************************
-
-*************************************************************
 Generating : Drill Drawing
       File : Grantv3.GD1
 
@@ -59,9 +11,9 @@ Generating : Drill Drawing
 
 
 Used DCodes :
-    D291
-    D292
-    D293
+    D270
+    D271
+    D272
 *************************************************************
 
 *************************************************************
@@ -74,23 +26,60 @@ Generating : Drill Guide
 
 
 Used DCodes :
-    D291
+    D270
 *************************************************************
 
 *************************************************************
-Generating : Bottom Overlay
-      File : Grantv3.GBO
+Generating : Bottom Pad Master
+      File : Grantv3.GPB
 
-    Adding Layer      : Bottom Overlay
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
 
 
 Used DCodes :
-    D10
-    D12
-    D13
-    D15
-    D289
-    D290
+    D23
+    D28
+    D34
+    D35
+    D241
+    D242
+    D243
+    D244
+    D245
+    D246
+    D247
+    D248
+*************************************************************
+
+*************************************************************
+Generating : Bottom Paste
+      File : Grantv3.GBP
+
+    Adding Layer      : Bottom Paste
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D23
+    D28
+    D34
+    D35
+*************************************************************
+
+*************************************************************
+Generating : Mechanical 2
+      File : Grantv3.GM2
+
+    Adding Layer      : Mechanical 2
+
+
+Used DCodes :
+    D11
 *************************************************************
 
 *************************************************************
@@ -103,44 +92,14 @@ Generating : Bottom Layer
 
 
 Used DCodes :
-    D12
-    D16
-    D24
-    D25
+    D11
+    D23
+    D28
+    D34
     D35
-    D39
-    D40
-    D41
     D123
     D124
     D125
-    D126
-    D215
-    D216
-    D217
-    D218
-    D219
-    D220
-    D221
-    D222
-    D223
-    D224
-    D225
-    D226
-    D227
-    D228
-    D229
-    D230
-    D231
-    D232
-    D233
-    D234
-    D235
-    D236
-    D237
-    D238
-    D239
-    D240
     D241
     D242
     D243
@@ -168,25 +127,6 @@ Used DCodes :
     D265
     D266
     D267
-    D268
-    D269
-    D270
-    D271
-    D272
-    D273
-    D274
-    D275
-    D276
-    D277
-    D278
-    D279
-    D280
-    D281
-    D282
-    D283
-    D284
-    D285
-    D286
 *************************************************************
 
 *************************************************************
@@ -210,12 +150,13 @@ Used DCodes :
     D20
     D21
     D22
-    D23
 *************************************************************
 
 *************************************************************
-Generating : Top Pad Master
-      File : Grantv3.GPT
+Generating : Top Solder
+      File : Grantv3.GTS
+
+    Adding Layer      : Top Solder
 
     Adding Layer      : Top Layer
 
@@ -223,6 +164,118 @@ Generating : Top Pad Master
 
 
 Used DCodes :
+    D68
+    D69
+    D70
+    D71
+    D72
+    D73
+    D74
+    D75
+    D76
+    D77
+    D78
+    D79
+    D80
+    D81
+    D82
+    D83
+    D84
+    D85
+    D86
+    D87
+    D88
+    D89
+    D90
+    D91
+    D92
+    D93
+    D94
+    D95
+    D96
+    D97
+    D98
+    D99
+    D100
+    D101
+    D102
+    D103
+    D104
+    D105
+    D106
+    D107
+    D108
+    D109
+    D110
+    D111
+    D112
+    D113
+    D114
+    D115
+    D116
+    D117
+    D118
+    D119
+    D120
+    D121
+    D122
+*************************************************************
+
+*************************************************************
+Generating : Bottom Solder
+      File : Grantv3.GBS
+
+    Adding Layer      : Bottom Solder
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D68
+    D74
+    D80
+    D81
+    D114
+    D115
+    D116
+    D117
+    D118
+    D119
+    D120
+    D121
+    D122
+*************************************************************
+
+*************************************************************
+Generating : Bottom Overlay
+      File : Grantv3.GBO
+
+    Adding Layer      : Bottom Overlay
+
+
+Used DCodes :
+    D11
+    D13
+    D15
+    D268
+    D269
+*************************************************************
+
+*************************************************************
+Generating : Top Paste
+      File : Grantv3.GTP
+
+    Adding Layer      : Top Paste
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D23
     D24
     D25
     D26
@@ -267,24 +320,6 @@ Used DCodes :
     D65
     D66
     D67
-    D68
-    D215
-    D216
-    D217
-    D218
-    D219
-    D220
-*************************************************************
-
-*************************************************************
-Generating : Mechanical 2
-      File : Grantv3.GM2
-
-    Adding Layer      : Mechanical 2
-
-
-Used DCodes :
-    D12
 *************************************************************
 
 *************************************************************
@@ -297,8 +332,8 @@ Generating : Top Layer
 
 
 Used DCodes :
-    D12
-    D16
+    D11
+    D23
     D24
     D25
     D26
@@ -343,7 +378,6 @@ Used DCodes :
     D65
     D66
     D67
-    D68
     D123
     D124
     D125
@@ -443,13 +477,39 @@ Used DCodes :
     D219
     D220
     D221
+    D222
+    D223
+    D224
+    D225
+    D226
+    D227
+    D228
+    D229
+    D230
+    D231
+    D232
+    D233
+    D234
+    D235
+    D236
+    D237
+    D238
+    D239
+    D240
+    D241
+    D242
+    D243
+    D244
+    D245
+    D246
+    D247
+    D248
+    D249
 *************************************************************
 
 *************************************************************
-Generating : Top Solder
-      File : Grantv3.GTS
-
-    Adding Layer      : Top Solder
+Generating : Top Pad Master
+      File : Grantv3.GPT
 
     Adding Layer      : Top Layer
 
@@ -457,105 +517,7 @@ Generating : Top Solder
 
 
 Used DCodes :
-    D69
-    D70
-    D71
-    D72
-    D73
-    D74
-    D75
-    D76
-    D77
-    D78
-    D79
-    D80
-    D81
-    D82
-    D83
-    D84
-    D85
-    D86
-    D87
-    D88
-    D89
-    D90
-    D91
-    D92
-    D93
-    D94
-    D95
-    D96
-    D97
-    D98
-    D99
-    D100
-    D101
-    D102
-    D103
-    D104
-    D105
-    D106
-    D107
-    D108
-    D109
-    D110
-    D111
-    D112
-    D113
-    D114
-    D115
-    D116
-    D117
-    D118
-    D119
-    D120
-    D121
-    D122
-*************************************************************
-
-*************************************************************
-Generating : Bottom Solder
-      File : Grantv3.GBS
-
-    Adding Layer      : Bottom Solder
-
-    Adding Layer      : Bottom Layer
-
-    Adding Layer      : Multi-Layer
-
-
-Used DCodes :
-    D69
-    D70
-    D76
-    D81
-    D85
-    D86
-    D87
-    D115
-    D116
-    D117
-    D118
-    D119
-    D120
-    D121
-    D122
-    D287
-    D288
-*************************************************************
-
-*************************************************************
-Generating : Top Paste
-      File : Grantv3.GTP
-
-    Adding Layer      : Top Paste
-
-    Adding Layer      : Top Layer
-
-    Adding Layer      : Multi-Layer
-
-
-Used DCodes :
+    D23
     D24
     D25
     D26
@@ -600,6 +562,13 @@ Used DCodes :
     D65
     D66
     D67
-    D68
+    D241
+    D242
+    D243
+    D244
+    D245
+    D246
+    D247
+    D248
 *************************************************************
 
