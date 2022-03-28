@@ -10,10 +10,10 @@
 #define TIME_DIMENSIONS 3
 #define TIME_TYPES 4
 
-#define NEXT 2
-#define BACK 3
-#define UP 4
-#define DOWN 5
+#define NEXT 7
+#define BACK 6
+#define UP 5
+#define DOWN 3
 
 #define DEBOUNCE 100
 
