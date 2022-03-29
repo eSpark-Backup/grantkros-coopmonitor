@@ -26,49 +26,101 @@ uint32_t tick = 0;
 
 void NEXT_SCREEN()
 {
+  static uint32_t ticks = 0;
 
-  time_position++;
+  if ((millis() - ticks) > DEBOUNCE)
+  {
+    time_position++;
 
-  Serial.println("NEXT");
+    Serial.println("NEXT");
+
+    ticks = millis();
+  }
 }
 
 void BACK_SCREEN()
 {
+  static uint32_t ticks = 0;
 
-  time_position--;
+  if ((millis() - ticks) > DEBOUNCE)
+  {
+    time_position--;
 
-  Serial.println("BACK");
+    Serial.println("BACK");
+
+    ticks = millis();
+
+  }
 }
 
 void UP_SCREEN()
 {
-  //  uint32_t tick = millis();
-  //  while ((millis() - tick) < DEBOUNCE);
-  //
-  //  time_keep[screen][time_position]++;
-  //
-  //  if (time_keep[screen][time_position] >= 60)
-  //  {
-  //    time_keep[screen][time_position] = 0;
-  //  }
+  static uint32_t ticks = 0;
 
-  Serial.println("UP");
+  if ((millis() - ticks) > DEBOUNCE)
+  {
+    time_keep[screen][time_position]++;
+
+    if (time_keep[screen][0] > 12)
+    {
+      time_keep[screen][0] = 0;
+    }
+
+    if (time_keep[screen][1] >= 60)
+    {
+      time_keep[screen][1] = 0;
+    }
+
+    if (time_keep[screen][2] >= 2)
+    {
+      time_keep[screen][2] = 0;
+    }
+
+    Serial.println("UP");
+    Serial.println("Screen");
+    Serial.println(screen);
+
+    Serial.println("Millis");
+    Serial.println(millis());
+
+    Serial.println(time_keep[screen][time_position]);
+
+    ticks = millis();
+  }
 }
 
 void DOWN_SCREEN()
 {
-  //  uint32_t tick = millis();
-  //  while ((millis() - tick) < DEBOUNCE);
-  //
-  //  time_keep[screen][time_position]--;
-  //
-  //  if (time_keep[screen][time_position] < 0)
-  //  {
-  //    time_keep[screen][time_position] = 0;
-  //  }
+  static uint32_t ticks = 0;
 
+  if ((millis() - ticks) > DEBOUNCE)
+  {
 
-  Serial.println("DOWN");
+    time_keep[screen][time_position]--;
+
+    if (time_keep[screen][0] > 12)
+    {
+      time_keep[screen][0] = 12;
+    }
+
+    if (time_keep[screen][1] >= 60)
+    {
+      time_keep[screen][1] = 59;
+    }
+
+    if (time_keep[screen][2] >= 2)
+    {
+      time_keep[screen][2] = 1;
+    }
+
+    Serial.println("DOWN");
+    Serial.println("Screen");
+    Serial.println(screen);
+
+    Serial.println(time_keep[screen][time_position]);
+
+    ticks = millis();
+  }
 }
 
 void setup() {
