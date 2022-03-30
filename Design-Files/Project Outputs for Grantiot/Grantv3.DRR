@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------------------------------------------------------
-NCDrill File Report For: Grantv3.PcbDoc   3/21/2022  2:12:36 PM
+NCDrill File Report For: Grantv3.PcbDoc   3/30/2022  1:12:07 PM
 ----------------------------------------------------------------------------------------------------------------------------------
 
 Layer Pair : Top Layer to Bottom Layer
@@ -9,7 +9,7 @@ ASCII SlotHoles File : Grantv3-SlotHoles.TXT
 
 Tool       Hole Size               Hole Tolerance               Hole Type       Hole Count   Plated         Tool Travel
 ----------------------------------------------------------------------------------------------------------------------------------
-T1      12mil (0.3mm)                                             Round             106       PTH        0.00inch (0.00mm)
+T1      12mil (0.3mm)                                             Round             92        PTH        0.00inch (0.00mm)
 T2      20mil (0.5mm)                                             Slot              2         PTH        0.00inch (0.00mm)
 T3      22mil (0.55mm)                                            Slot              2         PTH        0.00inch (0.00mm)
 T4      39mil (0.991mm)                                           Round             2         PTH        0.00inch (0.00mm)
@@ -20,10 +20,8 @@ T8      63mil (1.6mm)                                             Round         
 T9      39mil (0.991mm)                                           Round             3         NPTH       0.00inch (0.00mm)
 T10     48mil (1.22mm)                                            Round             2         NPTH       0.00inch (0.00mm)
 T11     59mil (1.5mm)                                             Round             2         NPTH       0.00inch (0.00mm)
-T12     63mil (1.6mm)                                             Round             1         NPTH       0.00inch (0.00mm)
-T13     71mil (1.8mm)                                             Round             1         NPTH       0.00inch (0.00mm)
-T14     94mil (2.375mm)                                           Round             4         NPTH       0.00inch (0.00mm)
+T12     94mil (2.375mm)                                           Round             4         NPTH       0.00inch (0.00mm)
 ----------------------------------------------------------------------------------------------------------------------------------
-Totals                                                                              149
+Totals                                                                              133
 
 Total Processing Time (hh:mm:ss) : 00:00:00
