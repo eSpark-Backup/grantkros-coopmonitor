@@ -92,10 +92,10 @@ D100  ROUNDED           158.000     158.000       0.000 FLASH       0.000
 D101  RECTANGULAR        70.992      70.992       0.000 FLASH     180.000
 D102  ROUNDED            70.992      70.992       0.000 FLASH       0.000
 D103  ROUNDED            83.000      83.000       0.000 FLASH       0.000
-D104  ROUNDED            22.000      22.000       0.000  LINE       0.000
+D104  ROUNDED             8.000       8.000       0.000  LINE       0.000
 D105  ROUNDED            40.000      40.000       0.000  LINE       0.000
-D106  ROUNDED            15.000      15.000       0.000  LINE       0.000
-D107  ROUNDED             8.000       8.000       0.000  LINE       0.000
+D106  ROUNDED            22.000      22.000       0.000  LINE       0.000
+D107  ROUNDED            15.000      15.000       0.000  LINE       0.000
 D108  ROUNDED            16.000      16.000       0.000  LINE       0.000
 D109  ROUNDED            18.000      18.000       0.000  LINE       0.000
 D110  RECTANGULAR        66.000      74.000       0.000 FLASH       0.000
