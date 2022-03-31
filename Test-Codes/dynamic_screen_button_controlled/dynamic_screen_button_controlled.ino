@@ -41,6 +41,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define SECOND 1
 #define THIRD 2
 
+#define HIGHLIGHTER_LEN 20
+#define SPACING 6
 
 uint8_t state = OUTSIDE;
 uint8_t previous_state = OUTSIDE;
@@ -265,14 +267,29 @@ void loop() {
     switched = false;
   }
 
-  if (time_position >= 3)
-  {
-    time_position = 0;
-  }
+  //  if (time_position >= 3)
+  //  {
+  //    time_position = 0;
+  //  }
 
-  if (time_position < 0)
+  if (state != previous_state)
   {
-    time_position = 0;
+    if (state == ENTERED)
+    {
+//      display.fillRect(25, 37, HIGHLIGHTER_LEN, 14, WHITE);
+//      display.display();
+
+    }
+
+    else if (state == OUTSIDE)
+    {
+      display.clearDisplay();
+      display.display();
+
+      idle_screen(FIRST);
+    }
+
+    previous_state = state;
   }
 }
 
@@ -286,26 +303,26 @@ void update_time(uint8_t* time_to_print)
 {
   String hours, minutes, am_pm = "";
 
-  display.fillRect(0, 37, 128, 14, BLACK);
+  display.fillRect(0, 37, 128, HIGHLIGHTER_LEN, BLACK);
   display.display();
+
+  if (time_position == 0)
+  {
+    display.fillRect(25, 37, HIGHLIGHTER_LEN, 14, WHITE);
+    display.display();
+  } else if (time_position == 1)
+  {
+    display.fillRect(25 + HIGHLIGHTER_LEN + SPACING, 37, HIGHLIGHTER_LEN, 14, WHITE);
+    display.display();
+  } else if (time_position == 2)
+  {
+    display.fillRect(25 + 2 * HIGHLIGHTER_LEN + 2 * SPACING + 5, 37, HIGHLIGHTER_LEN + 5, 14, WHITE);
+    display.display();
+  }
 
   // 00:00 AM
   display.setFont(&FreeSans9pt7b);
-  display.setCursor(25, 50);            // Start at top-left corner
-
-  //  if (time_position == 0)
-  //  {
-  //    display.fillRect(25, 37, 14, 14, WHITE);
-  //    display.display();
-  //  } else if (time_position == 1)
-  //  {
-  //    display.fillRect(39, 37, 14, 14, WHITE);
-  //    display.display();
-  //  } else if (time_position == 2)
-  //  {
-  //    display.fillRect(53, 37, 14, 14, WHITE);
-  //    display.display();
-  //  }
+  display.setCursor(25, 50);
 
   if (time_to_print[0] < 10)
   {
@@ -333,24 +350,28 @@ void update_time(uint8_t* time_to_print)
     am_pm = "PM";
   }
 
+  display.setTextColor(time_position == 0 ? BLACK : WHITE);
   display.print(hours);
-  display.print(":");
-
-  if (time_position == 1)
-  {
-    display.setTextColor(BLACK);
-    display.display();
-  }
-  display.print(minutes);
-  display.print(": ");
-
-  if (time_position == 1)
-  {
-    display.setTextColor(BLACK);
-  }
-  display.println(am_pm);
-
   display.display();
+
+  display.setTextColor(WHITE);
+  display.print(":");
+  display.display();
+
+  display.setTextColor(time_position == 1 ? BLACK : WHITE);
+  display.print(minutes);
+  display.display();
+
+  display.setTextColor(WHITE);
+  display.print(": ");
+  display.display();
+
+  display.setTextColor(time_position == 2 ? BLACK : WHITE);
+  display.println(am_pm);
+  display.display();
+
+  display.setTextColor(WHITE);
+
 }
 
 void draw_bitmap(uint8_t screens)
@@ -386,19 +407,19 @@ void draw_styles(uint8_t*  time_to_print)
 
   // Step 1 of 3
   display.setFont(&FreeSans6pt7b);
-  display.setCursor(45, 20);            // Start at top-left corner
+  display.setCursor(45, 20);
   display.println(F("Step 1 of 3"));
   display.display();
 
   // Set Current Time
   display.setFont(&FreeSans6pt7b);
-  display.setCursor(20, 35);            // Start at top-left corner
+  display.setCursor(20, 35);
   display.println(F("Set Current Time"));
   display.display();
 
   // 00:00 AM
   display.setFont(&FreeSans9pt7b);
-  display.setCursor(25, 50);            // Start at top-left corner
+  display.setCursor(25, 50);
 
   if (time_to_print[0] < 10)
   {
@@ -437,9 +458,14 @@ void NEXT_SCREEN()
   if ((millis() - ticks) > DEBOUNCE)
   {
     if (state == ENTERED)
-    {
       time_position++;
+
+    if (time_position >= 3)
+    {
+      time_position = 0;
     }
+
+    update_time(time_keep[FIRST]);
 
     Serial.println("NEXT");
     state = ENTERED;
