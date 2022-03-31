@@ -261,10 +261,23 @@ void setup() {
 
 void loop() {
 
-  if (switched)
+  if (switched == true)
   {
-    update_time(time_keep[FIRST]);
-    switched = false;
+    if (state == ENTERED)
+    {
+      update_time(time_keep[screen]);
+      switched = false;
+    }
+    //
+    else if (state == OUTSIDE)
+    {
+      display.clearDisplay();
+      display.display();
+
+      idle_screen(screen);
+
+      switched = false;
+    }
   }
 
   //  if (time_position >= 3)
@@ -274,19 +287,12 @@ void loop() {
 
   if (state != previous_state)
   {
-    if (state == ENTERED)
-    {
-//      display.fillRect(25, 37, HIGHLIGHTER_LEN, 14, WHITE);
-//      display.display();
-
-    }
-
-    else if (state == OUTSIDE)
+    if (state == OUTSIDE)
     {
       display.clearDisplay();
       display.display();
 
-      idle_screen(FIRST);
+      idle_screen(screen);
     }
 
     previous_state = state;
@@ -405,50 +411,87 @@ void draw_styles(uint8_t*  time_to_print)
   String hours, minutes, am_pm = "";
   display.setTextColor(WHITE);
 
-  // Step 1 of 3
-  display.setFont(&FreeSans6pt7b);
-  display.setCursor(45, 20);
-  display.println(F("Step 1 of 3"));
-  display.display();
-
-  // Set Current Time
-  display.setFont(&FreeSans6pt7b);
-  display.setCursor(20, 35);
-  display.println(F("Set Current Time"));
-  display.display();
-
-  // 00:00 AM
-  display.setFont(&FreeSans9pt7b);
-  display.setCursor(25, 50);
-
-  if (time_to_print[0] < 10)
+  if (screen == 0)
   {
-    hours = "0";
-    hours += String(time_to_print[0]);
-  } else
-  {
-    hours += String(time_to_print[0]);
+    // Step 1 of 3
+    display.setFont(&FreeSans6pt7b);
+    display.setCursor(45, 20);
+    display.println(F("Step 1 of 3"));
+    display.display();
+
+    // Set Current Time
+    display.setFont(&FreeSans6pt7b);
+    display.setCursor(20, 35);
+    display.println(F("Set Current Time"));
+    display.display();
   }
 
-  if (time_to_print[1] < 10)
+  else if (screen == 1)
   {
-    minutes = "0";
-    minutes += String(time_to_print[1]);
-  } else
-  {
-    minutes += String(time_to_print[1]);
+    // Step 2 of 3
+    display.setFont(&FreeSans6pt7b);
+    display.setCursor(45, 20);
+    display.println(F("Step 2 of 3"));
+    display.display();
+
+    // Set Current Time
+    display.setFont(&FreeSans6pt7b);
+    display.setCursor(20, 35);
+    display.println(F("Set Open Time"));
+    display.display();
   }
 
-  if (time_to_print[2] == 0)
+  else if (screen == 2)
   {
-    am_pm = "AM";
-  } else
-  {
-    am_pm = "PM";
+    // Step 3 of 3
+    display.setFont(&FreeSans6pt7b);
+    display.setCursor(45, 20);
+    display.println(F("Step 3 of 3"));
+    display.display();
+
+    // Set Current Time
+    display.setFont(&FreeSans6pt7b);
+    display.setCursor(20, 35);
+    display.println(F("Set Close Time"));
+    display.display();
   }
 
-  display.print(hours); display.print(":"); display.print(minutes); display.print(": "); display.println(am_pm);
-  display.display();
+
+  if ((screen < 3) && (screen >= 0))
+  {
+    // 00:00 AM
+    display.setFont(&FreeSans9pt7b);
+    display.setCursor(25, 50);
+
+    if (time_to_print[0] < 10)
+    {
+      hours = "0";
+      hours += String(time_to_print[0]);
+    } else
+    {
+      hours += String(time_to_print[0]);
+    }
+
+    if (time_to_print[1] < 10)
+    {
+      minutes = "0";
+      minutes += String(time_to_print[1]);
+    } else
+    {
+      minutes += String(time_to_print[1]);
+    }
+
+    if (time_to_print[2] == 0)
+    {
+      am_pm = "AM";
+    } else
+    {
+      am_pm = "PM";
+    }
+
+    display.print(hours); display.print(":"); display.print(minutes); display.print(": "); display.println(am_pm);
+    display.display();
+  }
 }
 
 void NEXT_SCREEN()
@@ -465,7 +508,7 @@ void NEXT_SCREEN()
       time_position = 0;
     }
 
-    update_time(time_keep[FIRST]);
+    update_time(time_keep[screen]);
 
     Serial.println("NEXT");
     state = ENTERED;
@@ -514,8 +557,12 @@ void UP_SCREEN()
         time_keep[screen][2] = 0;
       }
 
-      switched = true;
+    } else if (state == OUTSIDE)
+    {
+      screen++;
     }
+
+    switched = true;
 
     ticks = millis();
   }
@@ -547,9 +594,14 @@ void DOWN_SCREEN()
         time_keep[screen][2] = 1;
       }
 
-      switched = true;
+    } else if (state == OUTSIDE)
+    {
+      screen--;
+
+      if (screen < 0)screen = 0;
     }
 
+    switched = true;
 
     ticks = millis();
   }
