@@ -1,16 +1,18 @@
 Altium Designer Pick and Place Locations
-E:\Git\GrantKros-CoopMonitor\Design-Files\Project Outputs for Grantiot\Pick Place for Grantv3.csv
+C:\Users\XPENDER\Documents\GitHub\GrantKros-CoopMonitor\Design-Files\Project Outputs for Grantiot\Pick Place for Grantv3.csv
 
 ========================================================================================================================
 File Design Information:
 
-Date:       31/03/22
-Time:       11:12
-Revision:   a5a1993e4fac8da83cd0e68bc8ead7868f2d28ee
+Date:       02/04/22
+Time:       18:46
+Revision:   153974316e7cb56c523c798c9a884a4f7d3d7192
 Variant:    No variations
 Units used: mil
 
 "Designator","Layer","Center-X(mil)","Center-Y(mil)","Rotation","Ref-X(mil)","Ref-Y(mil)","Pad-X(mil)","Pad-Y(mil)"
+"J3","TopLayer","589,275mil","2421,701mil","180","589,276mil","2421,701mil","640,457mil","2369,535mil"
+"C26","TopLayer","208,307mil","800,000mil","180","208,307mil","800,000mil","328,386mil","800,000mil"
 "R12","TopLayer","1147,000mil","723,000mil","270","1147,000mil","723,000mil","1147,000mil","741,500mil"
 "R20","TopLayer","1147,013mil","793,820mil","90","1147,013mil","793,820mil","1147,013mil","775,320mil"
 "R2","TopLayer","1101,012mil","787,820mil","180","1101,013mil","787,820mil","1111,839mil","787,820mil"
@@ -23,7 +25,6 @@ Units used: mil
 "R34","TopLayer","2180,000mil","2121,500mil","90","2180,000mil","2121,500mil","2180,000mil","2103,000mil"
 "R14","BottomLayer","2584,650mil","360,000mil","360","2584,650mil","360,000mil","2566,150mil","360,000mil"
 "R13","BottomLayer","2530,326mil","345,000mil","270","2530,326mil","345,000mil","2530,326mil","363,500mil"
-"C26","TopLayer","208,299mil","800,000mil","180","208,299mil","800,000mil","352,000mil","800,000mil"
 "SB21","TopLayer","3835,000mil","1857,299mil","360","3835,000mil","1857,299mil","3805,000mil","1857,299mil"
 "R10","TopLayer","3693,000mil","1813,796mil","90","3693,000mil","1813,796mil","3693,000mil","1795,296mil"
 "R6","TopLayer","2481,000mil","2121,500mil","90","2481,000mil","2121,500mil","2481,000mil","2103,000mil"
@@ -42,7 +43,6 @@ Units used: mil
 "C31","BottomLayer","666,589mil","2420,883mil","360","666,589mil","2420,883mil","636,589mil","2420,883mil"
 "LZ1","TopLayer","2772,165mil","1098,000mil","360","2772,165mil","1098,000mil","2699,331mil","1098,000mil"
 "Q3","TopLayer","2448,000mil","1386,000mil","270","2448,000mil","1385,994mil","2405,677mil","1423,402mil"
-"J3","TopLayer","585,292mil","2421,854mil","180","585,292mil","2368,704mil","636,473mil","2368,704mil"
 "P13","TopLayer","5086,000mil","1640,200mil","360","5086,000mil","1640,200mil","5086,000mil","1640,200mil"
 "R8","TopLayer","2379,000mil","2121,500mil","90","2379,000mil","2121,500mil","2379,000mil","2103,000mil"
 "RF5","TopLayer","2868,000mil","1534,500mil","270","2868,000mil","1534,500mil","2868,000mil","1553,000mil"
@@ -63,7 +63,7 @@ Units used: mil
 "SB_ZD1","TopLayer","2521,000mil","1481,000mil","180","2521,000mil","1481,000mil","2551,000mil","1481,000mil"
 "S1","TopLayer","4915,000mil","391,000mil","270","4915,000mil","391,000mil","4733,898mil","579,976mil"
 "RZ1","TopLayer","2687,180mil","1411,003mil","270","2687,180mil","1411,003mil","2687,180mil","1429,503mil"
-"RF23","TopLayer","585,000mil","2267,000mil","90","585,000mil","2267,000mil","585,000mil","2248,500mil"
+"RF23","TopLayer","588,000mil","2267,000mil","90","588,000mil","2267,000mil","588,000mil","2248,500mil"
 "RF22","BottomLayer","643,500mil","2312,000mil","180","643,500mil","2312,000mil","662,000mil","2312,000mil"
 "RF6","TopLayer","2780,000mil","1493,500mil","90","2780,000mil","1493,500mil","2780,000mil","1475,000mil"
 "R4","TopLayer","3692,830mil","1711,299mil","90","3692,830mil","1711,299mil","3692,830mil","1692,799mil"
