@@ -1,12 +1,12 @@
 Altium Designer Pick and Place Locations
-C:\Users\XPENDER\Documents\GitHub\GrantKros-CoopMonitor\Design-Files\Project Outputs for Grantiot\Pick Place for Grantv3.txt
+E:\Git\GrantKros-CoopMonitor\Design-Files\Pick Place for Grantv3.txt
 
 ========================================================================================================================
 File Design Information:
 
-Date:       02/04/22
-Time:       18:46
-Revision:   153974316e7cb56c523c798c9a884a4f7d3d7192
+Date:       04/04/22
+Time:       14:53
+Revision:   Not in VersionControl
 Variant:    No variations
 Units used: mil
 
@@ -17,7 +17,7 @@ R12        TopLayer    1147,000mil   723,000mil    270      1147,000mil 723,000m
 R20        TopLayer    1147,013mil   793,820mil    90       1147,013mil 793,820mil  1147,013mil 775,320mil  
 R2         TopLayer    1101,012mil   787,820mil    180      1101,013mil 787,820mil  1111,839mil 787,820mil  
 J7         TopLayer    2531,150mil   197,000mil    360      2334,299mil 197,000mil  2334,299mil 197,000mil  
-R24        TopLayer    2723,098mil   1880,677mil   180      2723,098mil 1880,677mil 2741,598mil 1880,677mil 
+R24        TopLayer    2723,000mil   1843,000mil   180      2723,000mil 1843,000mil 2741,500mil 1843,000mil 
 Q4         TopLayer    2559,605mil   1929,177mil   180      2559,598mil 1929,177mil 2597,006mil 1971,500mil 
 Q1         TopLayer    2709,000mil   1931,500mil   0        2709,006mil 1931,500mil 2671,598mil 1889,177mil 
 J1         TopLayer    2531,044mil   2217,070mil   180      2531,044mil 2217,070mil 2981,044mil 2217,070mil 

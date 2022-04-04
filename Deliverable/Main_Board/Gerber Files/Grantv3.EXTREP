@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------------------
-Gerber File Extension Report For: Grantv3.GBR   4/2/2022  6:47:24 PM
+Gerber File Extension Report For: Grantv3.GBR   4/4/2022  2:51:28 PM
 ------------------------------------------------------------------------------------------
 
 
@@ -15,6 +15,7 @@ Layer Extension     Layer Description
 .GBP                Bottom Paste                            
 .GBO                Bottom Overlay                          
 .GM2                Mechanical 2                            
+.GKO                Keep-Out Layer                          
 .GPT                Top Pad Master                          
 .GPB                Bottom Pad Master                       
 .GD1                Drill Drawing                           
