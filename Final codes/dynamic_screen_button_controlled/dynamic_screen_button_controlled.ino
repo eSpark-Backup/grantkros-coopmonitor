@@ -1572,7 +1572,7 @@ void loop() {
   {
     if (state == ENTERED)
     {
-      if ((screen < FOURTH) && (screen >= FIRST))
+      if ((screen < FOURTH) && (screen >= FIRST) || ((screen >= (MENU + 0)) && (screen < (MENU + 3))))
       {
         update_time(time_keep[screen]);
       }
@@ -1618,6 +1618,9 @@ void loop() {
 
     Serial.println("Minutes");
     Serial.println(rtc.getMinutes());
+
+    Serial.println("State");
+    Serial.println(state);
 
     if ((rtc.getHours() > time_keep[OPEN_TIME][HOURS]) && (rtc.getHours() < time_keep[CLOSE_TIME][HOURS]))
     {
@@ -1917,6 +1920,7 @@ void NEXT_SCREEN()
       {
         last_saved_screen = screen;
         screen = position + MENU;
+        state = ENTERED;
         print_screen(screen);
       } else {
         print_screen(++screen);
@@ -1924,13 +1928,32 @@ void NEXT_SCREEN()
 
       entered_scroll_page1 = screen <= FIFTH ? true : false;
 
-      state = OUTSIDE;
-      time_position = 0;
+      if (screen < FIFTH)
+      {
+        state = OUTSIDE;
+        time_position = 0;
+      }
     }
 
     if ((screen < FOURTH) && (screen >= FIRST))
     {
       update_time(time_keep[screen]);
+    } else if ((screen >= MENU) && (screen < (MENU + 3)))
+    {
+      switch (screen)
+      {
+        case (MENU + 2):
+          update_time(time_keep[FIRST]);
+          break;
+
+        case (MENU):
+          update_time(time_keep[SECOND]);
+          break;
+
+        case (MENU + 1):
+          update_time(time_keep[THIRD]);
+          break;
+      }
     }
 
     //    if ((screen == FIFTH) && (state == ENTERED))
@@ -1988,6 +2011,16 @@ void BACK_SCREEN()
 void UP_SCREEN()
 {
   static uint32_t ticks = 0;
+  uint8_t temp_screen = 0;
+
+  // Correct array index if screen >= MENU
+  if(screen < FOURTH)
+  {
+    temp_screen = screen;
+  }else if(screen >= MENU)
+  {
+    temp_screen = screen - MENU;
+  }
 
   if ((millis() - ticks) > DEBOUNCE)
   {
@@ -1995,36 +2028,36 @@ void UP_SCREEN()
     {
       if (state == ENTERED)
       {
-        time_keep[screen][time_position]++;
+        time_keep[temp_screen][time_position]++;
 
-        if (time_keep[screen][0] > 12)
+        if (time_keep[temp_screen][0] > 12)
         {
-          time_keep[screen][0] = 0;
+          time_keep[temp_screen][0] = 0;
         }
 
-        if (time_keep[screen][1] >= 60)
+        if (time_keep[temp_screen][1] >= 60)
         {
-          time_keep[screen][1] = 0;
+          time_keep[temp_screen][1] = 0;
         }
 
-        if (time_keep[screen][2] >= 2)
+        if (time_keep[temp_screen][2] >= 2)
         {
-          time_keep[screen][2] = 0;
+          time_keep[temp_screen][2] = 0;
         }
 
         if (screen == 0)
         {
           // Set RTC Hours
-          if (time_keep[screen][2] == 1)
+          if (time_keep[temp_screen][2] == 1)
           {
             rtc.setHours(time_keep[screen][0] + 12);
-          } else if (time_keep[screen][2] == 0)
+          } else if (time_keep[temp_screen][2] == 0)
           {
-            rtc.setHours(time_keep[screen][0]);
+            rtc.setHours(time_keep[temp_screen][0]);
           }
 
           // Set RTC Minutes
-          rtc.setMinutes(time_keep[screen][1]);
+          rtc.setMinutes(time_keep[temp_screen][1]);
         }
 
       } else if (state == OUTSIDE)
