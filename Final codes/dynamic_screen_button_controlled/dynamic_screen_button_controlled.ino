@@ -51,6 +51,22 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define EIGHTH 7
 #define MENU 10
 
+#define CHANGE_OPEN_TIME MENU
+#define CHANGE_CLOSE_TIME (MENU + 1)
+#define CHANGE_CURRENT_TIME (MENU + 2)
+#define FACTORY_RESET (MENU + 3)
+#define CHANGE_STATUS (MENU + 4)
+#define DEVICE_INFORMATION (MENU + 5)
+#define DOOR_SOUND (MENU + 6)
+#define LAST_CHANCE (MENU + 7)
+#define CHANGE_LANGUAGE (MENU + 8)
+#define TEST_MODE (MENU + 9)
+#define REBOOT (MENU + 10)
+#define POWER_OFF (MENU + 11)
+
+#define SUBMENU 30
+#define FACTORY_RESET_SUBMENU SUBMENU
+
 #define HIGHLIGHTER_LEN_MENU 128
 #define HIGHLIGHTER_HEIGHT_MENU 10
 #define HIGHLIGHTER_LEN 20
@@ -61,6 +77,10 @@ uint8_t previous_state = OUTSIDE;
 uint8_t time_keep[TIME_TYPES][TIME_DIMENSIONS] = {0};
 uint8_t time_position = 0;
 uint8_t position = 0;
+uint8_t status_position = 0;
+uint8_t device_position = 0;
+uint8_t chance_position = 0;
+uint8_t yes_no_position = 0;
 uint8_t menu_count = 0;
 uint8_t screen = 0;
 uint8_t last_saved_screen = 0;
@@ -78,6 +98,11 @@ char menu[][64] = {"Change Open Time", "Change Close Time", "Change Current Time
                    "Change Status", "Device Information", "Door Sound", "Last Chance",
                    "Change Language", "Test Mode", "Reboot", "Power Off"
                   };
+char status_menu[][64] = {"Pause", "Automatic", "Manual"};
+char device_menu[][64] = {"Firmware Version", "Serial Number"};
+char yes_no[][64] = {"Yes", "No"};
+char chance_menu[][64] = {"Turn on", "Turn off"};
+
 
 void print_screen(uint8_t screens);
 void update_time(uint8_t* time_to_print);
@@ -90,6 +115,10 @@ void UP_SCREEN();
 void DOWN_SCREEN();
 void welcome_screen();
 void print_menu();
+void print_status_menu();
+void print_devce_information();
+void print_yes_no();
+void print_last_chance_menu();
 
 void setup() {
   Serial.begin(115200);
@@ -179,7 +208,7 @@ void loop() {
     }
   }
 
-  // Used for return back to normal screen for time screens
+  // Used for returning back to normal screen for time screens
   if (screen < FOURTH)
   {
     if (state != previous_state)
@@ -305,7 +334,7 @@ void update_time(uint8_t* time_to_print)
   display.display();
 
   display.setTextColor(WHITE);
-  display.print(": ");
+  display.print(" ");
   display.display();
 
   display.setTextColor(time_position == 2 ? BLACK : WHITE);
@@ -393,12 +422,194 @@ void draw_text(uint8_t*  time_to_print)
     print_menu();
   }
 
+  if (screen == FACTORY_RESET)
+  {
+    display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+
+    display.setFont(&FreeSans5pt7b);
+
+    display.setCursor(6, 18);
+    display.setTextColor(BLACK);
+    display.print("Reset Device");
+    display.display();
+
+    screen = FACTORY_RESET_SUBMENU;
+  } else if (screen == CHANGE_STATUS)
+  {
+    print_status_menu();
+  } else if (screen == DEVICE_INFORMATION)
+  {
+    print_devce_information();
+  } else if (screen == DOOR_SOUND)
+  {
+    display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+
+    display.setFont(&FreeSans5pt7b);
+
+    display.setCursor(6, 18);
+    display.setTextColor(BLACK);
+    display.print("Song1");
+    display.display();
+  } else if (screen == LAST_CHANCE)
+  {
+    print_last_chance_menu();
+    //    display.setFont(&FreeSans9pt7b);
+    //    display.setCursor(25, 45);
+    //    display_time(time_keep[OPEN_TIME]);
+  } else if (screen == CHANGE_LANGUAGE)
+  {
+    display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+
+    display.setFont(&FreeSans5pt7b);
+
+    display.setCursor(6, 18);
+    display.setTextColor(BLACK);
+    display.print("English (UK)");
+    display.display();
+  } else if (screen == TEST_MODE)
+  {
+    display.setFont(&FreeSans5pt7b);
+
+    display.setCursor(25, 40);
+    display.setTextColor(WHITE);
+    display.print("Test Mode Running");
+    display.display();
+  } else if (screen == REBOOT)
+  {
+    print_yes_no();
+  } else if (screen == POWER_OFF)
+  {
+    print_yes_no();
+  }
+
   if ((screen < 3) && (screen >= 0))
   {
     display.setFont(&FreeSans9pt7b);
     display.setCursor(25, 45);
     display_time(time_to_print);
   }
+}
+
+void print_last_chance_menu()
+{
+  if (chance_position == 0)
+  {
+    display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+  } else if (chance_position == 1)
+  {
+    display.fillRect(6, 22, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+  }
+
+  display.setFont(&FreeSans5pt7b);
+  display.setTextColor(WHITE);
+
+  display.setCursor(6, 18);
+  display.setTextColor(device_position == 0 ? BLACK : WHITE);
+  display.print(chance_menu[0]);
+  display.display();
+
+  display.setCursor(6, 30);
+  display.setTextColor(device_position == 1 ? BLACK : WHITE);
+  display.print(chance_menu[1]);
+  display.display();
+}
+
+void print_yes_no()
+{
+  if (yes_no_position == 0)
+  {
+    display.fillRect(6, 22, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+  } else if (yes_no_position == 1)
+  {
+    display.fillRect(6, 32, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+  }
+
+  display.setFont(&FreeSans5pt7b);
+  display.setTextColor(WHITE);
+
+  display.setCursor(6, 30);
+  display.setTextColor(device_position == 0 ? BLACK : WHITE);
+  display.print(yes_no[0]);
+  display.display();
+
+  display.setCursor(6, 42);
+  display.setTextColor(device_position == 1 ? BLACK : WHITE);
+  display.print(yes_no[1]);
+  display.display();
+}
+
+void print_devce_information()
+{
+  display.fillRect(0, 12, 128, 43, BLACK);
+  display.display();
+
+  if (device_position == 0)
+  {
+    display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+  } else if (device_position == 1)
+  {
+    display.fillRect(6, 22, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+  }
+
+  display.setFont(&FreeSans5pt7b);
+  display.setTextColor(WHITE);
+
+  display.setCursor(6, 18);
+  display.setTextColor(device_position == 0 ? BLACK : WHITE);
+  display.print(device_menu[0]);
+  display.display();
+
+  display.setCursor(6, 30);
+  display.setTextColor(device_position == 1 ? BLACK : WHITE);
+  display.print(device_menu[1]);
+  display.display();
+}
+
+void print_status_menu()
+{
+  display.fillRect(0, 12, 128, 43, BLACK);
+  display.display();
+
+  if (status_position == 0)
+  {
+    display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+  } else if (status_position == 1)
+  {
+    display.fillRect(6, 22, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+  } else if (status_position == 2)
+  {
+    display.fillRect(6, 34, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+  }
+
+  display.setFont(&FreeSans5pt7b);
+  display.setTextColor(WHITE);
+
+  display.setCursor(6, 18);
+  display.setTextColor(status_position == 0 ? BLACK : WHITE);
+  display.print(status_menu[0]);
+  display.display();
+
+  display.setCursor(6, 30);
+  display.setTextColor(status_position == 1 ? BLACK : WHITE);
+  display.print(status_menu[1]);
+  display.display();
+
+  display.setCursor(6, 42);
+  display.setTextColor(status_position == 2 ? BLACK : WHITE);
+  display.print(status_menu[2]);
+  display.display();
 }
 
 void print_menu()
@@ -528,15 +739,15 @@ void NEXT_SCREEN()
       switch (screen)
       {
         case (MENU + 2):
-          update_time(time_keep[FIRST]);
+          update_time(time_keep[CURRENT_TIME]);
           break;
 
         case (MENU):
-          update_time(time_keep[SECOND]);
+          update_time(time_keep[OPEN_TIME]);
           break;
 
         case (MENU + 1):
-          update_time(time_keep[THIRD]);
+          update_time(time_keep[CLOSE_TIME]);
           break;
       }
     }
