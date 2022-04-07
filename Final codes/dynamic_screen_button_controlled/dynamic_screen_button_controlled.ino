@@ -434,6 +434,7 @@ void draw_text(uint8_t*  time_to_print)
     display.print("Reset Device");
     display.display();
 
+    state = OUTSIDE;
     screen = FACTORY_RESET_SUBMENU;
   } else if (screen == CHANGE_STATUS)
   {
@@ -707,7 +708,8 @@ void NEXT_SCREEN()
       time_position = 0;
     }
 
-    if (((screen == FOURTH) && (!entered_scroll_page1)) || (screen >= FIFTH))
+    // Print new screen
+    if (((screen == FOURTH) && (!entered_scroll_page1)) || ((screen >= FIFTH) && (screen <  SUBMENU)))
     {
       display.clearDisplay();
       display.display();
@@ -731,6 +733,7 @@ void NEXT_SCREEN()
       }
     }
 
+    // Respond to each button click for each menu
     if ((screen < FOURTH) && (screen >= FIRST))
     {
       update_time(time_keep[screen]);
@@ -750,6 +753,10 @@ void NEXT_SCREEN()
           update_time(time_keep[CLOSE_TIME]);
           break;
       }
+    } else if ((screen == FACTORY_RESET_SUBMENU) && (state == ENTERED))
+    {
+      rtc.begin();
+      NVIC_SystemReset();
     }
 
     //    if ((screen == FIFTH) && (state == ENTERED))
@@ -789,7 +796,7 @@ void BACK_SCREEN()
       print_screen(screen);
     }
 
-    if ((screen >= MENU))
+    if ((screen >= MENU) && (screen < SUBMENU))
     {
       display.clearDisplay();
       display.display();
