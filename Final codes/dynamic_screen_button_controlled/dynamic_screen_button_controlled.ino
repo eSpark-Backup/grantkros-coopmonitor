@@ -1574,7 +1574,28 @@ void loop() {
     {
       if ((screen < FOURTH) && (screen >= FIRST) || ((screen >= (MENU + 0)) && (screen < (MENU + 3))))
       {
-        update_time(time_keep[screen]);
+        uint8_t temp_screen = 0;
+        if (screen < FOURTH)
+        {
+          temp_screen = screen;
+        } else if ((screen >= (MENU + 0)) && (screen < (MENU + 3)))
+        {
+          switch (screen)
+          {
+            case (MENU + 2):
+              temp_screen = CURRENT_TIME;
+              break;
+
+            case (MENU):
+              temp_screen = OPEN_TIME;
+              break;
+
+            case (MENU + 1):
+              temp_screen = CLOSE_TIME;
+              break;
+          }
+        }
+        update_time(time_keep[temp_screen]);
       }
 
       switched = false;
@@ -2013,17 +2034,31 @@ void UP_SCREEN()
   static uint32_t ticks = 0;
   uint8_t temp_screen = 0;
 
-  // Correct array index if screen >= MENU
-  if(screen < FOURTH)
-  {
-    temp_screen = screen;
-  }else if(screen >= MENU)
-  {
-    temp_screen = screen - MENU;
-  }
-
   if ((millis() - ticks) > DEBOUNCE)
   {
+
+    // Correct array index if screen >= MENU
+    if (screen < FOURTH)
+    {
+      temp_screen = screen;
+    } else if (screen >= MENU)
+    {
+      switch (screen)
+      {
+        case (MENU + 2):
+          temp_screen = CURRENT_TIME;
+          break;
+
+        case (MENU):
+          temp_screen = OPEN_TIME;
+          break;
+
+        case (MENU + 1):
+          temp_screen = CLOSE_TIME;
+          break;
+      }
+    }
+
     if (!entered_scroll_page1)
     {
       if (state == ENTERED)
@@ -2098,30 +2133,53 @@ void UP_SCREEN()
 
 void DOWN_SCREEN()
 {
+  uint8_t temp_screen = 0;
   static uint32_t ticks = 0;
 
   if ((millis() - ticks) > DEBOUNCE)
   {
 
+    // Correct array index if screen >= MENU
+    if (screen < FOURTH)
+    {
+      temp_screen = screen;
+    } else if (screen >= MENU)
+    {
+      switch (screen)
+      {
+        case (MENU + 2):
+          temp_screen = CURRENT_TIME;
+          break;
+
+        case (MENU):
+          temp_screen = OPEN_TIME;
+          break;
+
+        case (MENU + 1):
+          temp_screen = CLOSE_TIME;
+          break;
+      }
+    }
+
     if (!entered_scroll_page1)
     {
       if (state == ENTERED)
       {
-        time_keep[screen][time_position]--;
+        time_keep[temp_screen][time_position]--;
 
-        if (time_keep[screen][0] > 12)
+        if (time_keep[temp_screen][0] > 12)
         {
-          time_keep[screen][0] = 12;
+          time_keep[temp_screen][0] = 12;
         }
 
-        if (time_keep[screen][1] >= 60)
+        if (time_keep[temp_screen][1] >= 60)
         {
-          time_keep[screen][1] = 59;
+          time_keep[temp_screen][1] = 59;
         }
 
-        if (time_keep[screen][2] >= 2)
+        if (time_keep[temp_screen][2] >= 2)
         {
-          time_keep[screen][2] = 1;
+          time_keep[temp_screen][2] = 1;
         }
 
       } else if (state == OUTSIDE)
