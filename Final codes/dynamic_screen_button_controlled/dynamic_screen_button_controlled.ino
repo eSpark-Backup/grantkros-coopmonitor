@@ -87,7 +87,8 @@ uint8_t screen = 0;
 uint8_t last_saved_screen = 0;
 uint32_t tick = 0;
 uint8_t switched = false;
-uint8_t entered_scroll_page1 = false;
+uint8_t entered_scroll_page_main = false;
+uint8_t entered_scroll_page_status = false;
 uint32_t print_tick = 0;
 
 RTCZero rtc;
@@ -198,7 +199,7 @@ void loop() {
       switched = false;
     }
 
-    else if (state == OUTSIDE)
+    else if ((state == OUTSIDE) || (entered_scroll_page_main) || (entered_scroll_page_status))
     {
       if (screen <= FIFTH)
       {
@@ -239,6 +240,12 @@ void loop() {
 
     Serial.println("State");
     Serial.println(state);
+
+    Serial.println("Scroll page main");
+    Serial.println(entered_scroll_page_main);
+
+    Serial.println("Scroll page status");
+    Serial.println(entered_scroll_page_status);
 
     if ((rtc.getHours() > time_keep[OPEN_TIME][HOURS]) && (rtc.getHours() < time_keep[CLOSE_TIME][HOURS]))
     {
@@ -386,7 +393,7 @@ void draw_bg(uint8_t screens)
       (display.height() - LOGO_HEIGHT) / 2,
       epd_bitmap_Settings___Page_2_01, LOGO_WIDTH, LOGO_HEIGHT, 1);
     display.display();
-  } else if (screens >= MENU)
+  } else if ((screens >= MENU) && (screen < SUBMENU))
   {
     display.drawBitmap(
       (display.width()  - LOGO_WIDTH ) / 2,
@@ -440,9 +447,11 @@ void draw_text(uint8_t*  time_to_print)
 
     state = OUTSIDE;
     screen = FACTORY_RESET_SUBMENU;
-  } else if (screen == CHANGE_STATUS)
+  } else if ((screen == CHANGE_STATUS) || (screen == CHANGE_STATUS_SUBMENU))
   {
     print_status_menu();
+    screen = CHANGE_STATUS_SUBMENU;
+    entered_scroll_page_status = true;
   } else if (screen == DEVICE_INFORMATION)
   {
     print_devce_information();
@@ -789,7 +798,7 @@ void NEXT_SCREEN()
     }
 
     // Print new screen
-    if (((screen == FOURTH) && (!entered_scroll_page1)) || ((screen >= FIFTH) && (screen <  SUBMENU)))
+    if (((screen == FOURTH) && (!entered_scroll_page_main)) || ((screen >= FIFTH) && (screen <  SUBMENU)))
     {
       display.clearDisplay();
       display.display();
@@ -798,18 +807,18 @@ void NEXT_SCREEN()
       {
         last_saved_screen = screen;
         screen = position + MENU;
-        state = ENTERED;
+        //state = ENTERED;
         print_screen(screen);
       } else {
         print_screen(++screen);
       }
 
       // Set flag to indicate that scroll page has entered
-      entered_scroll_page1 = (screen == FIFTH) ? true : false;
+      entered_scroll_page_main = (screen == FIFTH) ? true : false;
 
       if (screen < FIFTH)
       {
-        state = OUTSIDE;
+        //state = OUTSIDE;
         time_position = 0;
       }
     }
@@ -849,7 +858,7 @@ void NEXT_SCREEN()
 
     Serial.println("NEXT");
 
-    if (!entered_scroll_page1)
+    if ((!entered_scroll_page_main) && (!entered_scroll_page_status))
     {
       state = ENTERED;
     }
@@ -867,7 +876,7 @@ void BACK_SCREEN()
 
     time_position = 0;
     Serial.println("BACK");
-    state = OUTSIDE;
+
 
     if ((screen >= FIFTH) && (screen < MENU))
     {
@@ -875,7 +884,7 @@ void BACK_SCREEN()
       display.display();
 
       screen = FOURTH;
-      entered_scroll_page1 = false;
+      entered_scroll_page_main = false;
       print_screen(screen);
     } else if ((screen >= MENU) && (screen < SUBMENU))
     {
@@ -883,7 +892,7 @@ void BACK_SCREEN()
       display.display();
 
       screen = FIFTH;
-      entered_scroll_page1 = true;
+      entered_scroll_page_main = true;
       print_screen(screen);
     } else if (screen == FACTORY_RESET_SUBMENU)
     {
@@ -891,9 +900,20 @@ void BACK_SCREEN()
       display.display();
 
       screen = FIFTH;
-      entered_scroll_page1 = true;
+      entered_scroll_page_main = true;
+      print_screen(screen);
+    } else if (screen == CHANGE_STATUS_SUBMENU)
+    {
+      display.clearDisplay();
+      display.display();
+
+      screen = FIFTH;
+      entered_scroll_page_status = false;
+      entered_scroll_page_main = true;
       print_screen(screen);
     }
+
+    state = OUTSIDE;
 
     ticks = millis();
 
@@ -911,7 +931,7 @@ void UP_SCREEN()
     // Correct array index if screen >= MENU
     temp_screen = adjust_menu_index();
 
-    if (!entered_scroll_page1)
+    if (!entered_scroll_page_main && !entered_scroll_page_status)
     {
       if (state == ENTERED)
       {
@@ -933,21 +953,28 @@ void UP_SCREEN()
       }
     }
 
-    else if (entered_scroll_page1)
+    else if (entered_scroll_page_main)
     {
       screen++;
-
       position++;
 
+      // Display new options if selector crossed first/last option of page
       change_menu_screen();
 
       if (screen > EIGHTH)screen = EIGHTH;
-
       if (position >= 12)position = 11;
+
+    } else if (entered_scroll_page_status)
+    {
+      status_position++;
+      if (status_position >= 3) status_position = 2;
     }
 
+    // Indicate pressign of up/down button
     switched = true;
 
+
+    // Used for button debounce
     ticks = millis();
   }
 }
@@ -964,7 +991,7 @@ void DOWN_SCREEN()
     temp_screen = adjust_menu_index();
 
 
-    if (!entered_scroll_page1)
+    if (!entered_scroll_page_main && !entered_scroll_page_status)
     {
       if (state == ENTERED)
       {
@@ -980,7 +1007,7 @@ void DOWN_SCREEN()
       }
     }
 
-    else if (entered_scroll_page1)
+    else if (entered_scroll_page_main)
     {
       screen--;
 
@@ -991,10 +1018,16 @@ void DOWN_SCREEN()
       if (screen < FIFTH)screen = FIFTH;
 
       if (position >= 12)position = 0;
+    } else if (entered_scroll_page_status)
+    {
+      status_position--;
+      if (status_position >= 3) status_position = 0;
     }
 
+    // Indicate pressign of up/down button
     switched = true;
 
+    // Used for button debounce
     ticks = millis();
   }
 }
