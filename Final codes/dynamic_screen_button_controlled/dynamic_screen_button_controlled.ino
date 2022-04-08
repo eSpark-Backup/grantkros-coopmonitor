@@ -67,6 +67,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define SUBMENU 30
 #define FACTORY_RESET_SUBMENU SUBMENU
 #define CHANGE_STATUS_SUBMENU (SUBMENU + 1)
+#define DEVICE_INFORMATION_SUBMENU (SUBMENU + 2)
 
 #define HIGHLIGHTER_LEN_MENU 128
 #define HIGHLIGHTER_HEIGHT_MENU 10
@@ -89,6 +90,7 @@ uint32_t tick = 0;
 uint8_t switched = false;
 uint8_t entered_scroll_page_main = false;
 uint8_t entered_scroll_page_status = false;
+uint8_t entered_scroll_page_device = false;
 uint32_t print_tick = 0;
 
 RTCZero rtc;
@@ -199,7 +201,7 @@ void loop() {
       switched = false;
     }
 
-    else if ((state == OUTSIDE) || (entered_scroll_page_main) || (entered_scroll_page_status))
+    else if ((state == OUTSIDE) || (entered_scroll_page_main) || (entered_scroll_page_status) || (entered_scroll_page_device))
     {
       if (screen <= FIFTH)
       {
@@ -246,6 +248,9 @@ void loop() {
 
     Serial.println("Scroll page status");
     Serial.println(entered_scroll_page_status);
+
+    Serial.println("Scroll page device");
+    Serial.println(entered_scroll_page_device);
 
     if ((rtc.getHours() > time_keep[OPEN_TIME][HOURS]) && (rtc.getHours() < time_keep[CLOSE_TIME][HOURS]))
     {
@@ -452,8 +457,10 @@ void draw_text(uint8_t*  time_to_print)
     print_status_menu();
     screen = CHANGE_STATUS_SUBMENU;
     entered_scroll_page_status = true;
-  } else if (screen == DEVICE_INFORMATION)
+  } else if ((screen == DEVICE_INFORMATION) || (screen == DEVICE_INFORMATION_SUBMENU))
   {
+    screen = DEVICE_INFORMATION_SUBMENU;
+    entered_scroll_page_device = true;
     print_devce_information();
   } else if (screen == DOOR_SOUND)
   {
@@ -858,7 +865,7 @@ void NEXT_SCREEN()
 
     Serial.println("NEXT");
 
-    if ((!entered_scroll_page_main) && (!entered_scroll_page_status))
+    if ((!entered_scroll_page_main) && (!entered_scroll_page_status) && (!entered_scroll_page_device))
     {
       state = ENTERED;
     }
@@ -911,6 +918,15 @@ void BACK_SCREEN()
       entered_scroll_page_status = false;
       entered_scroll_page_main = true;
       print_screen(screen);
+    } else if (screen == DEVICE_INFORMATION_SUBMENU)
+    {
+      display.clearDisplay();
+      display.display();
+
+      screen = FIFTH;
+      entered_scroll_page_device = false;
+      entered_scroll_page_main = true;
+      print_screen(screen);
     }
 
     state = OUTSIDE;
@@ -931,7 +947,7 @@ void UP_SCREEN()
     // Correct array index if screen >= MENU
     temp_screen = adjust_menu_index();
 
-    if (!entered_scroll_page_main && !entered_scroll_page_status)
+    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device)
     {
       if (state == ENTERED)
       {
@@ -968,6 +984,10 @@ void UP_SCREEN()
     {
       status_position++;
       if (status_position >= 3) status_position = 2;
+    } else if (entered_scroll_page_device)
+    {
+      device_position++;
+      if (device_position >= 2) device_position = 1;
     }
 
     // Indicate pressign of up/down button
@@ -990,8 +1010,7 @@ void DOWN_SCREEN()
     // Correct array index if screen >= MENU
     temp_screen = adjust_menu_index();
 
-
-    if (!entered_scroll_page_main && !entered_scroll_page_status)
+    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device)
     {
       if (state == ENTERED)
       {
@@ -1022,6 +1041,10 @@ void DOWN_SCREEN()
     {
       status_position--;
       if (status_position >= 3) status_position = 0;
+    } else if (entered_scroll_page_device)
+    {
+      device_position--;
+      if (device_position >= 2) device_position = 0;
     }
 
     // Indicate pressign of up/down button
