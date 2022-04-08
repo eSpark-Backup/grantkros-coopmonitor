@@ -66,6 +66,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 #define SUBMENU 30
 #define FACTORY_RESET_SUBMENU SUBMENU
+#define CHANGE_STATUS_SUBMENU (SUBMENU + 1)
 
 #define HIGHLIGHTER_LEN_MENU 128
 #define HIGHLIGHTER_HEIGHT_MENU 10
@@ -119,6 +120,9 @@ void print_status_menu();
 void print_devce_information();
 void print_yes_no();
 void print_last_chance_menu();
+uint8_t adjust_menu_index();
+void setRTCTime(uint8_t temp_screen);
+void adjust_12_hours_format(uint8_t temp_screen);
 
 void setup() {
   Serial.begin(115200);
@@ -660,6 +664,35 @@ void print_menu()
   display.display();
 }
 
+uint8_t adjust_menu_index()
+{
+  uint8_t temp_screen = 0;
+
+  // Correct array index if screen >= MENU
+  if (screen < FOURTH)
+  {
+    temp_screen = screen;
+  } else if (screen >= MENU)
+  {
+    switch (screen)
+    {
+      case (MENU + 2):
+        temp_screen = CURRENT_TIME;
+        break;
+
+      case (MENU):
+        temp_screen = OPEN_TIME;
+        break;
+
+      case (MENU + 1):
+        temp_screen = CLOSE_TIME;
+        break;
+    }
+  }
+
+  return temp_screen;
+}
+
 void display_time(uint8_t* time_to_print)
 {
   String hours, minutes, am_pm = "";
@@ -694,6 +727,53 @@ void display_time(uint8_t* time_to_print)
   display.display();
 }
 
+void adjust_12_hours_format(uint8_t temp_screen)
+{
+  if (time_keep[temp_screen][HOURS] > 12)
+  {
+    time_keep[temp_screen][HOURS] = 0;
+  }
+
+  if (time_keep[temp_screen][MINUTES] >= 60)
+  {
+    time_keep[temp_screen][MINUTES] = 0;
+  }
+
+  if (time_keep[temp_screen][AM_PM] >= 2)
+  {
+    time_keep[temp_screen][AM_PM] = 0;
+  }
+}
+
+void setRTCTime(uint8_t temp_screen)
+{
+  // Set RTC TIME
+  if (time_keep[temp_screen][HOURS] == 1)
+  {
+    rtc.setHours(time_keep[screen][HOURS] + 12);
+  } else if (time_keep[temp_screen][2] == 0)
+  {
+    rtc.setHours(time_keep[temp_screen][HOURS]);
+  }
+
+  // Set RTC Minutes
+  rtc.setMinutes(time_keep[temp_screen][MINUTES]);
+}
+
+void change_menu_screen()
+{
+  if ((position >= 0 && position < 4))
+  {
+    menu_count = 0;
+  } else if ((position >= 4 && position < 8))
+  {
+    menu_count = 1;
+  } else if ((position >= 8 && position < 12))
+  {
+    menu_count = 2;
+  }
+}
+
 void NEXT_SCREEN()
 {
   static uint32_t ticks = 0;
@@ -724,7 +804,8 @@ void NEXT_SCREEN()
         print_screen(++screen);
       }
 
-      entered_scroll_page1 = screen <= FIFTH ? true : false;
+      // Set flag to indicate that scroll page has entered
+      entered_scroll_page1 = (screen == FIFTH) ? true : false;
 
       if (screen < FIFTH)
       {
@@ -768,8 +849,10 @@ void NEXT_SCREEN()
 
     Serial.println("NEXT");
 
-    if ((!entered_scroll_page1))
+    if (!entered_scroll_page1)
+    {
       state = ENTERED;
+    }
 
     ticks = millis();
   }
@@ -794,9 +877,15 @@ void BACK_SCREEN()
       screen = FOURTH;
       entered_scroll_page1 = false;
       print_screen(screen);
-    }
+    } else if ((screen >= MENU) && (screen < SUBMENU))
+    {
+      display.clearDisplay();
+      display.display();
 
-    if ((screen >= MENU) && (screen < SUBMENU))
+      screen = FIFTH;
+      entered_scroll_page1 = true;
+      print_screen(screen);
+    } else if (screen == FACTORY_RESET_SUBMENU)
     {
       display.clearDisplay();
       display.display();
@@ -820,26 +909,7 @@ void UP_SCREEN()
   {
 
     // Correct array index if screen >= MENU
-    if (screen < FOURTH)
-    {
-      temp_screen = screen;
-    } else if (screen >= MENU)
-    {
-      switch (screen)
-      {
-        case (MENU + 2):
-          temp_screen = CURRENT_TIME;
-          break;
-
-        case (MENU):
-          temp_screen = OPEN_TIME;
-          break;
-
-        case (MENU + 1):
-          temp_screen = CLOSE_TIME;
-          break;
-      }
-    }
+    temp_screen = adjust_menu_index();
 
     if (!entered_scroll_page1)
     {
@@ -847,34 +917,12 @@ void UP_SCREEN()
       {
         time_keep[temp_screen][time_position]++;
 
-        if (time_keep[temp_screen][0] > 12)
-        {
-          time_keep[temp_screen][0] = 0;
-        }
+        adjust_12_hours_format(temp_screen);
 
-        if (time_keep[temp_screen][1] >= 60)
+        // set Current Time
+        if (screen == CURRENT_TIME)
         {
-          time_keep[temp_screen][1] = 0;
-        }
-
-        if (time_keep[temp_screen][2] >= 2)
-        {
-          time_keep[temp_screen][2] = 0;
-        }
-
-        if (screen == 0)
-        {
-          // Set RTC Hours
-          if (time_keep[temp_screen][2] == 1)
-          {
-            rtc.setHours(time_keep[screen][0] + 12);
-          } else if (time_keep[temp_screen][2] == 0)
-          {
-            rtc.setHours(time_keep[temp_screen][0]);
-          }
-
-          // Set RTC Minutes
-          rtc.setMinutes(time_keep[temp_screen][1]);
+          setRTCTime(temp_screen);
         }
 
       } else if (state == OUTSIDE)
@@ -891,16 +939,7 @@ void UP_SCREEN()
 
       position++;
 
-      if ((position >= 0 && position < 4))
-      {
-        menu_count = 0;
-      } else if ((position >= 4 && position < 8))
-      {
-        menu_count = 1;
-      } else if ((position >= 8 && position < 12))
-      {
-        menu_count = 2;
-      }
+      change_menu_screen();
 
       if (screen > EIGHTH)screen = EIGHTH;
 
@@ -922,26 +961,8 @@ void DOWN_SCREEN()
   {
 
     // Correct array index if screen >= MENU
-    if (screen < FOURTH)
-    {
-      temp_screen = screen;
-    } else if (screen >= MENU)
-    {
-      switch (screen)
-      {
-        case (MENU + 2):
-          temp_screen = CURRENT_TIME;
-          break;
+    temp_screen = adjust_menu_index();
 
-        case (MENU):
-          temp_screen = OPEN_TIME;
-          break;
-
-        case (MENU + 1):
-          temp_screen = CLOSE_TIME;
-          break;
-      }
-    }
 
     if (!entered_scroll_page1)
     {
@@ -949,20 +970,7 @@ void DOWN_SCREEN()
       {
         time_keep[temp_screen][time_position]--;
 
-        if (time_keep[temp_screen][0] > 12)
-        {
-          time_keep[temp_screen][0] = 12;
-        }
-
-        if (time_keep[temp_screen][1] >= 60)
-        {
-          time_keep[temp_screen][1] = 59;
-        }
-
-        if (time_keep[temp_screen][2] >= 2)
-        {
-          time_keep[temp_screen][2] = 1;
-        }
+        adjust_12_hours_format(temp_screen);
 
       } else if (state == OUTSIDE)
       {
@@ -978,16 +986,7 @@ void DOWN_SCREEN()
 
       position--;
 
-      if ((position >= 0 && position < 4))
-      {
-        menu_count = 0;
-      } else if ((position >= 4 && position < 8))
-      {
-        menu_count = 1;
-      } else if ((position >= 8 && position < 12))
-      {
-        menu_count = 2;
-      }
+      change_menu_screen();
 
       if (screen < FIFTH)screen = FIFTH;
 
