@@ -68,6 +68,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define FACTORY_RESET_SUBMENU SUBMENU
 #define CHANGE_STATUS_SUBMENU (SUBMENU + 1)
 #define DEVICE_INFORMATION_SUBMENU (SUBMENU + 2)
+#define DOOR_SOUND_SUBMENU (SUBMENU + 3)
+#define LAST_CHANCE_SUBMENU (SUBMENU + 4)
 
 #define HIGHLIGHTER_LEN_MENU 128
 #define HIGHLIGHTER_HEIGHT_MENU 10
@@ -91,6 +93,7 @@ uint8_t switched = false;
 uint8_t entered_scroll_page_main = false;
 uint8_t entered_scroll_page_status = false;
 uint8_t entered_scroll_page_device = false;
+uint8_t entered_scroll_page_lastChance = false;
 uint32_t print_tick = 0;
 
 RTCZero rtc;
@@ -201,7 +204,7 @@ void loop() {
       switched = false;
     }
 
-    else if ((state == OUTSIDE) || (entered_scroll_page_main) || (entered_scroll_page_status) || (entered_scroll_page_device))
+    else if ((state == OUTSIDE) || (entered_scroll_page_main) || (entered_scroll_page_status) || (entered_scroll_page_device) || (entered_scroll_page_lastChance))
     {
       if (screen <= FIFTH)
       {
@@ -251,6 +254,9 @@ void loop() {
 
     Serial.println("Scroll page device");
     Serial.println(entered_scroll_page_device);
+
+    Serial.println("Scroll page last chance");
+    Serial.println(entered_scroll_page_lastChance);
 
     if ((rtc.getHours() > time_keep[OPEN_TIME][HOURS]) && (rtc.getHours() < time_keep[CLOSE_TIME][HOURS]))
     {
@@ -473,12 +479,14 @@ void draw_text(uint8_t*  time_to_print)
     display.setTextColor(BLACK);
     display.print("Song1");
     display.display();
-  } else if (screen == LAST_CHANCE)
+
+    state = OUTSIDE;
+    screen = DOOR_SOUND_SUBMENU;
+  } else if ((screen == LAST_CHANCE) || (screen == LAST_CHANCE_SUBMENU))
   {
+    screen = LAST_CHANCE_SUBMENU;
+    entered_scroll_page_lastChance = true;
     print_last_chance_menu();
-    //    display.setFont(&FreeSans9pt7b);
-    //    display.setCursor(25, 45);
-    //    display_time(time_keep[OPEN_TIME]);
   } else if (screen == CHANGE_LANGUAGE)
   {
     display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
@@ -516,6 +524,9 @@ void draw_text(uint8_t*  time_to_print)
 
 void print_last_chance_menu()
 {
+  display.fillRect(0, 12, 128, 43, BLACK);
+  display.display();
+
   if (chance_position == 0)
   {
     display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
@@ -530,18 +541,21 @@ void print_last_chance_menu()
   display.setTextColor(WHITE);
 
   display.setCursor(6, 18);
-  display.setTextColor(device_position == 0 ? BLACK : WHITE);
+  display.setTextColor(chance_position == 0 ? BLACK : WHITE);
   display.print(chance_menu[0]);
   display.display();
 
   display.setCursor(6, 30);
-  display.setTextColor(device_position == 1 ? BLACK : WHITE);
+  display.setTextColor(chance_position == 1 ? BLACK : WHITE);
   display.print(chance_menu[1]);
   display.display();
 }
 
 void print_yes_no()
 {
+  display.fillRect(0, 12, 128, 43, BLACK);
+  display.display();
+
   if (yes_no_position == 0)
   {
     display.fillRect(6, 22, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
@@ -854,6 +868,10 @@ void NEXT_SCREEN()
     {
       rtc.begin();
       NVIC_SystemReset();
+    } else if ((screen == DOOR_SOUND_SUBMENU) && (state == ENTERED))
+    {
+      Serial.println("Playing Sound");
+      //      playSample(farmSound, farmSoundSize);
     }
 
     //    if ((screen == FIFTH) && (state == ENTERED))
@@ -865,7 +883,7 @@ void NEXT_SCREEN()
 
     Serial.println("NEXT");
 
-    if ((!entered_scroll_page_main) && (!entered_scroll_page_status) && (!entered_scroll_page_device))
+    if ((!entered_scroll_page_main) && (!entered_scroll_page_status) && (!entered_scroll_page_device) && (!entered_scroll_page_lastChance))
     {
       state = ENTERED;
     }
@@ -927,6 +945,23 @@ void BACK_SCREEN()
       entered_scroll_page_device = false;
       entered_scroll_page_main = true;
       print_screen(screen);
+    } else if (screen == DOOR_SOUND_SUBMENU)
+    {
+      display.clearDisplay();
+      display.display();
+
+      screen = FIFTH;
+      entered_scroll_page_main = true;
+      print_screen(screen);
+    } else if (screen == LAST_CHANCE_SUBMENU)
+    {
+      display.clearDisplay();
+      display.display();
+
+      screen = FIFTH;
+      entered_scroll_page_lastChance = false;
+      entered_scroll_page_main = true;
+      print_screen(screen);
     }
 
     state = OUTSIDE;
@@ -947,7 +982,7 @@ void UP_SCREEN()
     // Correct array index if screen >= MENU
     temp_screen = adjust_menu_index();
 
-    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device)
+    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device && !entered_scroll_page_lastChance)
     {
       if (state == ENTERED)
       {
@@ -988,6 +1023,10 @@ void UP_SCREEN()
     {
       device_position++;
       if (device_position >= 2) device_position = 1;
+    } else if (entered_scroll_page_lastChance)
+    {
+      chance_position++;
+      if (chance_position >= 2) chance_position = 1;
     }
 
     // Indicate pressign of up/down button
@@ -1010,7 +1049,7 @@ void DOWN_SCREEN()
     // Correct array index if screen >= MENU
     temp_screen = adjust_menu_index();
 
-    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device)
+    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device && !entered_scroll_page_lastChance)
     {
       if (state == ENTERED)
       {
@@ -1045,6 +1084,10 @@ void DOWN_SCREEN()
     {
       device_position--;
       if (device_position >= 2) device_position = 0;
+    } else if (entered_scroll_page_lastChance)
+    {
+      chance_position--;
+      if (chance_position >= 2) chance_position = 0;
     }
 
     // Indicate pressign of up/down button
