@@ -70,6 +70,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define DEVICE_INFORMATION_SUBMENU (SUBMENU + 2)
 #define DOOR_SOUND_SUBMENU (SUBMENU + 3)
 #define LAST_CHANCE_SUBMENU (SUBMENU + 4)
+#define REBOOT_SUBMENU (SUBMENU + 5)
+#define POWER_OFF_SUBMENU (SUBMENU + 6)
 
 #define HIGHLIGHTER_LEN_MENU 128
 #define HIGHLIGHTER_HEIGHT_MENU 10
@@ -94,6 +96,8 @@ uint8_t entered_scroll_page_main = false;
 uint8_t entered_scroll_page_status = false;
 uint8_t entered_scroll_page_device = false;
 uint8_t entered_scroll_page_lastChance = false;
+uint8_t entered_scroll_page_reboot = false;
+uint8_t entered_scroll_page_power_off = false;
 uint32_t print_tick = 0;
 
 RTCZero rtc;
@@ -204,7 +208,7 @@ void loop() {
       switched = false;
     }
 
-    else if ((state == OUTSIDE) || (entered_scroll_page_main) || (entered_scroll_page_status) || (entered_scroll_page_device) || (entered_scroll_page_lastChance))
+    else if ((state == OUTSIDE) || (entered_scroll_page_main) || (entered_scroll_page_status) || (entered_scroll_page_device) || (entered_scroll_page_lastChance) || (entered_scroll_page_reboot) || (entered_scroll_page_power_off))
     {
       if (screen <= FIFTH)
       {
@@ -506,11 +510,16 @@ void draw_text(uint8_t*  time_to_print)
     display.setTextColor(WHITE);
     display.print("Test Mode Running");
     display.display();
-  } else if (screen == REBOOT)
+  } else if ((screen == REBOOT) || (screen == REBOOT_SUBMENU))
   {
+    screen = REBOOT_SUBMENU;
+    entered_scroll_page_reboot = true;
     print_yes_no();
-  } else if (screen == POWER_OFF)
+  }
+  else if (screen == POWER_OFF || (screen == POWER_OFF_SUBMENU))
   {
+    screen = POWER_OFF_SUBMENU;
+    entered_scroll_page_power_off = true;
     print_yes_no();
   }
 
@@ -553,7 +562,7 @@ void print_last_chance_menu()
 
 void print_yes_no()
 {
-  display.fillRect(0, 12, 128, 43, BLACK);
+  display.fillRect(0, 22, 128, 43, BLACK);
   display.display();
 
   if (yes_no_position == 0)
@@ -570,12 +579,12 @@ void print_yes_no()
   display.setTextColor(WHITE);
 
   display.setCursor(6, 30);
-  display.setTextColor(device_position == 0 ? BLACK : WHITE);
+  display.setTextColor(yes_no_position == 0 ? BLACK : WHITE);
   display.print(yes_no[0]);
   display.display();
 
   display.setCursor(6, 42);
-  display.setTextColor(device_position == 1 ? BLACK : WHITE);
+  display.setTextColor(yes_no_position == 1 ? BLACK : WHITE);
   display.print(yes_no[1]);
   display.display();
 }
@@ -874,16 +883,9 @@ void NEXT_SCREEN()
       //      playSample(farmSound, farmSoundSize);
     }
 
-    //    if ((screen == FIFTH) && (state == ENTERED))
-    //    {
-    //      //      Serial.println("Playing Sound");
-    //      playSample(farmSound, farmSoundSize);
-    //
-    //    }
-
     Serial.println("NEXT");
 
-    if ((!entered_scroll_page_main) && (!entered_scroll_page_status) && (!entered_scroll_page_device) && (!entered_scroll_page_lastChance))
+    if ((!entered_scroll_page_main) && (!entered_scroll_page_status) && (!entered_scroll_page_device) && (!entered_scroll_page_lastChance) && (!entered_scroll_page_reboot) && ((!entered_scroll_page_power_off)))
     {
       state = ENTERED;
     }
@@ -962,6 +964,26 @@ void BACK_SCREEN()
       entered_scroll_page_lastChance = false;
       entered_scroll_page_main = true;
       print_screen(screen);
+    } else if (screen == REBOOT_SUBMENU)
+    {
+      yes_no_position = 0;
+      display.clearDisplay();
+      display.display();
+
+      screen = FIFTH;
+      entered_scroll_page_reboot = false;
+      entered_scroll_page_main = true;
+      print_screen(screen);
+    } else if (screen == POWER_OFF_SUBMENU)
+    {
+      yes_no_position = 0;
+      display.clearDisplay();
+      display.display();
+
+      screen = FIFTH;
+      entered_scroll_page_power_off = false;
+      entered_scroll_page_main = true;
+      print_screen(screen);
     }
 
     state = OUTSIDE;
@@ -982,7 +1004,7 @@ void UP_SCREEN()
     // Correct array index if screen >= MENU
     temp_screen = adjust_menu_index();
 
-    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device && !entered_scroll_page_lastChance)
+    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device && !entered_scroll_page_lastChance && !entered_scroll_page_reboot && !entered_scroll_page_power_off)
     {
       if (state == ENTERED)
       {
@@ -1027,6 +1049,14 @@ void UP_SCREEN()
     {
       chance_position++;
       if (chance_position >= 2) chance_position = 1;
+    } else if (entered_scroll_page_reboot)
+    {
+      yes_no_position++;
+      if (yes_no_position >= 2) yes_no_position = 1;
+    } else if (entered_scroll_page_power_off)
+    {
+      yes_no_position++;
+      if (yes_no_position >= 2) yes_no_position = 1;
     }
 
     // Indicate pressign of up/down button
@@ -1049,7 +1079,7 @@ void DOWN_SCREEN()
     // Correct array index if screen >= MENU
     temp_screen = adjust_menu_index();
 
-    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device && !entered_scroll_page_lastChance)
+    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device && !entered_scroll_page_lastChance && !entered_scroll_page_reboot && !entered_scroll_page_power_off)
     {
       if (state == ENTERED)
       {
@@ -1076,18 +1106,31 @@ void DOWN_SCREEN()
       if (screen < FIFTH)screen = FIFTH;
 
       if (position >= 12)position = 0;
-    } else if (entered_scroll_page_status)
+    }
+    else if (entered_scroll_page_status)
     {
       status_position--;
       if (status_position >= 3) status_position = 0;
-    } else if (entered_scroll_page_device)
+    }
+    else if (entered_scroll_page_device)
     {
       device_position--;
       if (device_position >= 2) device_position = 0;
-    } else if (entered_scroll_page_lastChance)
+    }
+    else if (entered_scroll_page_lastChance)
     {
       chance_position--;
       if (chance_position >= 2) chance_position = 0;
+    }
+    else if (entered_scroll_page_reboot)
+    {
+      yes_no_position--;
+      if (yes_no_position >= 2) yes_no_position = 0;
+    }
+    else if (entered_scroll_page_power_off)
+    {
+      yes_no_position--;
+      if (yes_no_position >= 2) yes_no_position = 0;
     }
 
     // Indicate pressign of up/down button
