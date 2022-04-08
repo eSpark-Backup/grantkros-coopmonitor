@@ -109,10 +109,11 @@ char menu[][64] = {"Change Open Time", "Change Close Time", "Change Current Time
                    "Change Status", "Device Information", "Door Sound", "Last Chance",
                    "Change Language", "Test Mode", "Reboot", "Power Off"
                   };
-char status_menu[][64] = {"Pause", "Automatic", "Manual"};
+char status_menu[][64] = {"PAUSE", "AUTOMATIC", "MANUAL"};
 char device_menu[][64] = {"Firmware Version", "Serial Number"};
 char yes_no[][64] = {"Yes", "No"};
 char chance_menu[][64] = {"Turn on", "Turn off"};
+char* selected_status = "AUTOMATIC";
 
 
 void print_screen(uint8_t screens);
@@ -208,7 +209,7 @@ void loop() {
       switched = false;
     }
 
-    else if ((state == OUTSIDE) || (entered_scroll_page_main) || (entered_scroll_page_status) || (entered_scroll_page_device) || (entered_scroll_page_lastChance) || (entered_scroll_page_reboot) || (entered_scroll_page_power_off))
+    if ((state == OUTSIDE) || (entered_scroll_page_main) || (entered_scroll_page_status) || (entered_scroll_page_device) || (entered_scroll_page_lastChance) || (entered_scroll_page_reboot) || (entered_scroll_page_power_off))
     {
       if (screen <= FIFTH)
       {
@@ -261,6 +262,12 @@ void loop() {
 
     Serial.println("Scroll page last chance");
     Serial.println(entered_scroll_page_lastChance);
+
+    Serial.println("Scroll page Reboot");
+    Serial.println(entered_scroll_page_reboot);
+
+    Serial.println("Scroll page last power off");
+    Serial.println(entered_scroll_page_power_off);
 
     if ((rtc.getHours() > time_keep[OPEN_TIME][HOURS]) && (rtc.getHours() < time_keep[CLOSE_TIME][HOURS]))
     {
@@ -427,7 +434,7 @@ void draw_text(uint8_t*  time_to_print)
   {
     display.setFont(&FreeSans3pt7b);
     display.setCursor(30, 18);
-    display.print("AUTOMATIC");
+    display.print(selected_status);
 
     display.setFont(&FreeSans6pt7b);
     display.setCursor(35, 30);
@@ -881,11 +888,14 @@ void NEXT_SCREEN()
     {
       Serial.println("Playing Sound");
       //      playSample(farmSound, farmSoundSize);
+    }else if((screen == CHANGE_STATUS_SUBMENU) && (state == ENTERED))
+    {
+      selected_status = status_menu[status_position];
     }
 
     Serial.println("NEXT");
 
-    if ((!entered_scroll_page_main) && (!entered_scroll_page_status) && (!entered_scroll_page_device) && (!entered_scroll_page_lastChance) && (!entered_scroll_page_reboot) && ((!entered_scroll_page_power_off)))
+    if ((!entered_scroll_page_main) && (!entered_scroll_page_device) && (!entered_scroll_page_lastChance) && (!entered_scroll_page_reboot) && ((!entered_scroll_page_power_off)))
     {
       state = ENTERED;
     }
