@@ -5,6 +5,7 @@
 #include <AudioPlayer.h>
 #include <RTCZero.h>
 #include <images.h>
+#include "ArduinoLowPower.h"
 
 #define Serial SerialUSB
 
@@ -605,7 +606,7 @@ void print_last_chance_menu()
 
 void print_yes_no()
 {
-  display.fillRect(0, 22, 128, 43, BLACK);
+  display.fillRect(0, 22, 128, 33, BLACK);
   display.display();
 
   if (yes_no_position == 0)
@@ -870,7 +871,8 @@ void NEXT_SCREEN()
       time_position = 0;
     }
 
-    // Print new screen
+    // Print new screen, include main and menu screens
+
     if (((screen == FOURTH) && (!entered_scroll_page_main)) || ((screen >= FIFTH) && (screen <  SUBMENU)))
     {
       display.clearDisplay();
@@ -880,9 +882,9 @@ void NEXT_SCREEN()
       {
         last_saved_screen = screen;
         screen = position + MENU;
-        //state = ENTERED;
         print_screen(screen);
-      } else {
+      }
+      else {
         print_screen(++screen);
       }
 
@@ -891,16 +893,17 @@ void NEXT_SCREEN()
 
       if (screen < FIFTH)
       {
-        //state = OUTSIDE;
         time_position = 0;
       }
     }
 
-    // Respond to each button click for each menu
+    // Respond to each button click for each menu/submenu
+
     if ((screen < FOURTH) && (screen >= FIRST))
     {
       update_time(time_keep[screen]);
-    } else if ((screen >= MENU) && (screen < (MENU + 3)))
+    }
+    else if ((screen >= MENU) && (screen < (MENU + 3)))
     {
       switch (screen)
       {
@@ -916,15 +919,18 @@ void NEXT_SCREEN()
           update_time(time_keep[CLOSE_TIME]);
           break;
       }
-    } else if ((screen == FACTORY_RESET_SUBMENU) && (state == ENTERED))
+    }
+    else if ((screen == FACTORY_RESET_SUBMENU) && (state == ENTERED))
     {
       rtc.begin();
       NVIC_SystemReset();
-    } else if ((screen == DOOR_SOUND_SUBMENU) && (state == ENTERED))
+    }
+    else if ((screen == DOOR_SOUND_SUBMENU) && (state == ENTERED))
     {
       Serial.println("Playing Sound");
       //      playSample(farmSound, farmSoundSize);
-    } else if ((screen == CHANGE_STATUS_SUBMENU) && (state == ENTERED))
+    }
+    else if ((screen == CHANGE_STATUS_SUBMENU) && (state == ENTERED))
     {
       selected_status = status_menu[status_position];
     }
@@ -938,16 +944,34 @@ void NEXT_SCREEN()
       {
         screen = FIRMWARE_VERSION;
         print_screen(screen);
-      } else if (device_position == 1)
+      }
+      else if (device_position == 1)
       {
         screen = SERIAL_NUMBER;
         print_screen(screen);
       }
     }
+    else if ((screen == REBOOT_SUBMENU) && (state == ENTERED))
+    {
+      if (yes_no_position == 0)
+      {
+        NVIC_SystemReset();
+      }
+    }
+    else if ((screen == POWER_OFF_SUBMENU) && (state == ENTERED))
+    {
+      if (yes_no_position == 0)
+      {
+        display.clearDisplay();
+        display.display();
+
+        LowPower.deepSleep();
+      }
+    }
 
     Serial.println("NEXT");
 
-    if ((!entered_scroll_page_main) && (!entered_scroll_page_lastChance) && (!entered_scroll_page_reboot) && ((!entered_scroll_page_power_off)))
+    if ((!entered_scroll_page_main) && (!entered_scroll_page_lastChance))
     {
       state = ENTERED;
     }
@@ -975,7 +999,8 @@ void BACK_SCREEN()
       screen = FOURTH;
       entered_scroll_page_main = false;
       print_screen(screen);
-    } else if ((screen >= MENU) && (screen < SUBMENU))
+    }
+    else if ((screen >= MENU) && (screen < SUBMENU))
     {
       display.clearDisplay();
       display.display();
@@ -983,7 +1008,8 @@ void BACK_SCREEN()
       screen = FIFTH;
       entered_scroll_page_main = true;
       print_screen(screen);
-    } else if (screen == FACTORY_RESET_SUBMENU)
+    }
+    else if (screen == FACTORY_RESET_SUBMENU)
     {
       display.clearDisplay();
       display.display();
@@ -991,7 +1017,8 @@ void BACK_SCREEN()
       screen = FIFTH;
       entered_scroll_page_main = true;
       print_screen(screen);
-    } else if (screen == CHANGE_STATUS_SUBMENU)
+    }
+    else if (screen == CHANGE_STATUS_SUBMENU)
     {
       display.clearDisplay();
       display.display();
@@ -1000,7 +1027,8 @@ void BACK_SCREEN()
       entered_scroll_page_status = false;
       entered_scroll_page_main = true;
       print_screen(screen);
-    } else if (screen == DEVICE_INFORMATION_SUBMENU)
+    }
+    else if (screen == DEVICE_INFORMATION_SUBMENU)
     {
       display.clearDisplay();
       display.display();
@@ -1009,7 +1037,8 @@ void BACK_SCREEN()
       entered_scroll_page_device = false;
       entered_scroll_page_main = true;
       print_screen(screen);
-    } else if (screen == DOOR_SOUND_SUBMENU)
+    }
+    else if (screen == DOOR_SOUND_SUBMENU)
     {
       display.clearDisplay();
       display.display();
@@ -1017,7 +1046,8 @@ void BACK_SCREEN()
       screen = FIFTH;
       entered_scroll_page_main = true;
       print_screen(screen);
-    } else if (screen == LAST_CHANCE_SUBMENU)
+    }
+    else if (screen == LAST_CHANCE_SUBMENU)
     {
       display.clearDisplay();
       display.display();
@@ -1026,7 +1056,8 @@ void BACK_SCREEN()
       entered_scroll_page_lastChance = false;
       entered_scroll_page_main = true;
       print_screen(screen);
-    } else if (screen == REBOOT_SUBMENU)
+    }
+    else if (screen == REBOOT_SUBMENU)
     {
       yes_no_position = 0;
       display.clearDisplay();
@@ -1036,7 +1067,8 @@ void BACK_SCREEN()
       entered_scroll_page_reboot = false;
       entered_scroll_page_main = true;
       print_screen(screen);
-    } else if (screen == POWER_OFF_SUBMENU)
+    }
+    else if (screen == POWER_OFF_SUBMENU)
     {
       yes_no_position = 0;
       display.clearDisplay();
