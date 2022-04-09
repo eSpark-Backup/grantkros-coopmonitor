@@ -49,8 +49,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define SIXTH 5
 #define SEVENTH 6
 #define EIGHTH 7
-#define MENU 10
 
+#define MENU 10
 #define CHANGE_OPEN_TIME MENU
 #define CHANGE_CLOSE_TIME (MENU + 1)
 #define CHANGE_CURRENT_TIME (MENU + 2)
@@ -72,6 +72,10 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define LAST_CHANCE_SUBMENU (SUBMENU + 4)
 #define REBOOT_SUBMENU (SUBMENU + 5)
 #define POWER_OFF_SUBMENU (SUBMENU + 6)
+
+#define DEVICE_DETAILS 40
+#define FIRMWARE_VERSION (DEVICE_DETAILS)
+#define SERIAL_NUMBER (DEVICE_DETAILS + 1)
 
 #define HIGHLIGHTER_LEN_MENU 128
 #define HIGHLIGHTER_HEIGHT_MENU 10
@@ -423,6 +427,21 @@ void draw_bg(uint8_t screens)
       options[screens - MENU], LOGO_WIDTH, LOGO_HEIGHT, 1);
     display.display();
   }
+  else if (screen == FIRMWARE_VERSION)
+  {
+    display.drawBitmap(
+      (display.width()  - LOGO_WIDTH ) / 2,
+      (display.height() - LOGO_HEIGHT) / 2,
+      epd_bitmap_Firmware_Version_01, LOGO_WIDTH, LOGO_HEIGHT, 1);
+    display.display();
+  } else if (screen == SERIAL_NUMBER)
+  {
+    display.drawBitmap(
+      (display.width()  - LOGO_WIDTH ) / 2,
+      (display.height() - LOGO_HEIGHT) / 2,
+      epd_bitmap_Serial_Number_01, LOGO_WIDTH, LOGO_HEIGHT, 1);
+    display.display();
+  }
 }
 
 void draw_text(uint8_t*  time_to_print)
@@ -509,7 +528,24 @@ void draw_text(uint8_t*  time_to_print)
     display.setTextColor(BLACK);
     display.print("English (UK)");
     display.display();
-  } else if (screen == TEST_MODE)
+  } else if (screen == FIRMWARE_VERSION)
+  {
+    display.setFont(&FreeSans9pt7b);
+
+    display.setCursor(10, 40);
+    display.setTextColor(WHITE);
+    display.print("1.0");
+    display.display();
+  } else if (screen == SERIAL_NUMBER)
+  {
+    display.setFont(&FreeSans9pt7b);
+
+    display.setCursor(10, 40);
+    display.setTextColor(WHITE);
+    display.print("abcxyz123");
+    display.display();
+  }
+  else if (screen == TEST_MODE)
   {
     display.setFont(&FreeSans5pt7b);
 
@@ -888,14 +924,30 @@ void NEXT_SCREEN()
     {
       Serial.println("Playing Sound");
       //      playSample(farmSound, farmSoundSize);
-    }else if((screen == CHANGE_STATUS_SUBMENU) && (state == ENTERED))
+    } else if ((screen == CHANGE_STATUS_SUBMENU) && (state == ENTERED))
     {
       selected_status = status_menu[status_position];
+    }
+    else if ((screen == DEVICE_INFORMATION_SUBMENU) && (state == ENTERED))
+    {
+      // Clear display contents before
+      display.clearDisplay();
+      display.display();
+
+      if (device_position == 0)
+      {
+        screen = FIRMWARE_VERSION;
+        print_screen(screen);
+      } else if (device_position == 1)
+      {
+        screen = SERIAL_NUMBER;
+        print_screen(screen);
+      }
     }
 
     Serial.println("NEXT");
 
-    if ((!entered_scroll_page_main) && (!entered_scroll_page_device) && (!entered_scroll_page_lastChance) && (!entered_scroll_page_reboot) && ((!entered_scroll_page_power_off)))
+    if ((!entered_scroll_page_main) && (!entered_scroll_page_lastChance) && (!entered_scroll_page_reboot) && ((!entered_scroll_page_power_off)))
     {
       state = ENTERED;
     }
@@ -995,8 +1047,31 @@ void BACK_SCREEN()
       entered_scroll_page_main = true;
       print_screen(screen);
     }
+    else if (screen == FIRMWARE_VERSION)
+    {
+      display.clearDisplay();
+      display.display();
 
-    state = OUTSIDE;
+      screen = DEVICE_INFORMATION;
+      entered_scroll_page_device = true;
+      entered_scroll_page_main = false;
+      print_screen(screen);
+    }
+    else if (screen == SERIAL_NUMBER)
+    {
+      display.clearDisplay();
+      display.display();
+
+      screen = DEVICE_INFORMATION;
+      entered_scroll_page_device = true;
+      entered_scroll_page_main = false;
+      print_screen(screen);
+    }
+
+    if (!entered_scroll_page_device)
+    {
+      state = OUTSIDE;
+    }
 
     ticks = millis();
 
