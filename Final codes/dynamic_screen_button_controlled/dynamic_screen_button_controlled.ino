@@ -101,7 +101,7 @@ uint8_t chance_position = 0;
 uint8_t yes_no_position = 0;
 uint8_t menu_count = 0;
 uint8_t screen = 0;
-uint8_t last_saved_screen = 0;
+uint8_t last_screen = 0;
 uint32_t tick = 0;
 uint8_t switched = false;
 uint8_t entered_scroll_page_main = false;
@@ -114,6 +114,7 @@ uint32_t print_tick = 0;
 uint8_t battery_pc = 100;
 uint8_t battery_icon = BATTERY_FULL;
 uint8_t last_battery_icon = BATTERY_FULL;
+
 
 RTCZero rtc;
 
@@ -151,6 +152,7 @@ void setRTCTime(uint8_t temp_screen);
 void adjust_12_hours_format(uint8_t temp_screen);
 void print_battery_status();
 void clear_battery_icon();
+void get_battery_status();
 
 void setup() {
   Serial.begin(115200);
@@ -192,6 +194,14 @@ void setup() {
 }
 
 void loop() {
+
+  //  get_battery_status();
+
+  if ((last_battery_icon != battery_icon))
+  {
+    last_battery_icon = battery_icon;
+    print_battery_status();
+  }
 
   if (switched == true)
   {
@@ -259,6 +269,8 @@ void loop() {
 
   if ((millis() - print_tick) > 2000)
   {
+    get_battery_status();
+
     Serial.println("Hours");
     Serial.println(rtc.getHours());
 
@@ -323,35 +335,35 @@ void print_screen(uint8_t screens)
 
 void print_battery_status()
 {
-
   clear_battery_icon();
+
+  display.drawBitmap(display.width() - BATTERY_WIDTH,
+                     -1,
+                     battery_icons[battery_icon] , BATTERY_WIDTH, BATTERY_HEIGHT, 1);
+  display.display();
+
+}
+
+void get_battery_status()
+{
+  // random number generated for batterty percentage
+  battery_pc = random(0, 100);
 
   if (battery_pc <= 10)
   {
-    display.drawBitmap(display.width() - BATTERY_WIDTH,
-                       -1,
-                       epd_bitmap_dead_01 , BATTERY_WIDTH, BATTERY_HEIGHT, 1);
-    display.display();
-    
+    battery_icon =  BATTERY_DEAD;
   } else if (battery_pc <= 50)
   {
-    display.drawBitmap(display.width() - BATTERY_WIDTH,
-                       -1,
-                       epd_bitmap_50__01 , BATTERY_WIDTH, BATTERY_HEIGHT, 1);
-    display.display();
-
+    battery_icon = BATTERY_HALF;
   } else if (battery_pc <= 100)
   {
-    display.drawBitmap(display.width() - BATTERY_WIDTH,
-                       -1,
-                       epd_bitmap_full_01 , BATTERY_WIDTH, BATTERY_HEIGHT, 1);
-    display.display();
+    battery_icon = BATTERY_FULL;
   }
 }
 
 void clear_battery_icon()
 {
-  display.fillRect(display.width() - BATTERY_WIDTH, -1, BATTERY_WIDTH, BATTERY_HEIGHT, BLACK);
+  display.fillRect(display.width() - BATTERY_WIDTH, -1, BATTERY_WIDTH, BATTERY_HEIGHT - 2, BLACK);
   display.display();
 }
 
@@ -475,14 +487,14 @@ void draw_bg(uint8_t screens)
       options[screens - MENU], LOGO_WIDTH, LOGO_HEIGHT, 1);
     display.display();
   }
-  else if (screen == FIRMWARE_VERSION)
+  else if (screens == FIRMWARE_VERSION)
   {
     display.drawBitmap(
       (display.width()  - LOGO_WIDTH ) / 2,
       (display.height() - LOGO_HEIGHT) / 2,
       epd_bitmap_Firmware_Version_01, LOGO_WIDTH, LOGO_HEIGHT, 1);
     display.display();
-  } else if (screen == SERIAL_NUMBER)
+  } else if (screens == SERIAL_NUMBER)
   {
     display.drawBitmap(
       (display.width()  - LOGO_WIDTH ) / 2,
@@ -927,7 +939,6 @@ void NEXT_SCREEN()
 
       if (screen >= FIFTH)
       {
-        last_saved_screen = screen;
         screen = position + MENU;
         print_screen(screen);
       }
