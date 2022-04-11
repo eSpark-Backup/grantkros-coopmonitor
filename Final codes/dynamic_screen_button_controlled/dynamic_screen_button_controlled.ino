@@ -32,7 +32,6 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define CURRENT_TIME 0
 #define OPEN_TIME 1
 #define CLOSE_TIME 2
-
 #define OPEN_TIME_LAST_CHANCE 3
 
 #define HOURS 0
@@ -81,6 +80,11 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define FIRMWARE_VERSION (DEVICE_DETAILS)
 #define SERIAL_NUMBER (DEVICE_DETAILS + 1)
 
+#define LAST_CHANCE_TIMER 50
+#define LAST_CHANCE_TIMER_SET_TIME (LAST_CHANCE_TIMER + 1)
+#define LAST_CHANCE_TIMER_5_MINS (LAST_CHANCE_TIMER + 2)
+#define LAST_CHANCE_TIMER_10_MINS (LAST_CHANCE_TIMER + 3)
+
 #define HIGHLIGHTER_LEN_MENU 128
 #define HIGHLIGHTER_HEIGHT_MENU 10
 #define HIGHLIGHTER_LEN 20
@@ -115,7 +119,6 @@ uint8_t battery_pc = 100;
 uint8_t last_battery_pc = 100;
 uint8_t battery_icon = BATTERY_FULL;
 uint8_t last_battery_icon = BATTERY_FULL;
-
 
 RTCZero rtc;
 
@@ -535,6 +538,14 @@ void draw_bg(uint8_t screens)
       epd_bitmap_Serial_Number_01, LOGO_WIDTH, LOGO_HEIGHT, 1);
     display.display();
   }
+  else if (screens == LAST_CHANCE_TIMER_SET_TIME)
+  {
+    display.drawBitmap(
+      (display.width()  - LOGO_WIDTH ) / 2,
+      (display.height() - LOGO_HEIGHT) / 2,
+      epd_bitmap_LastChanceSetOpenTime, LOGO_WIDTH, LOGO_HEIGHT, 1);
+    display.display();
+  }
 }
 
 void draw_text(uint8_t*  time_to_print)
@@ -581,17 +592,23 @@ void draw_text(uint8_t*  time_to_print)
 
     state = OUTSIDE;
     screen = FACTORY_RESET_SUBMENU;
-  } else if ((screen == CHANGE_STATUS) || (screen == CHANGE_STATUS_SUBMENU))
+  }
+
+  else if ((screen == CHANGE_STATUS) || (screen == CHANGE_STATUS_SUBMENU))
   {
     print_status_menu();
     screen = CHANGE_STATUS_SUBMENU;
     entered_scroll_page_status = true;
-  } else if ((screen == DEVICE_INFORMATION) || (screen == DEVICE_INFORMATION_SUBMENU))
+  }
+
+  else if ((screen == DEVICE_INFORMATION) || (screen == DEVICE_INFORMATION_SUBMENU))
   {
     screen = DEVICE_INFORMATION_SUBMENU;
     entered_scroll_page_device = true;
     print_devce_information();
-  } else if (screen == DOOR_SOUND)
+  }
+
+  else if (screen == DOOR_SOUND)
   {
     display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
     display.display();
@@ -605,12 +622,20 @@ void draw_text(uint8_t*  time_to_print)
 
     state = OUTSIDE;
     screen = DOOR_SOUND_SUBMENU;
-  } else if ((screen == LAST_CHANCE) || (screen == LAST_CHANCE_SUBMENU))
+  }
+  else if ((screen == LAST_CHANCE) || (screen == LAST_CHANCE_SUBMENU))
   {
     screen = LAST_CHANCE_SUBMENU;
     entered_scroll_page_lastChance = true;
     print_last_chance_menu();
-  } else if (screen == CHANGE_LANGUAGE)
+  }
+  else if (screen == LAST_CHANCE_TIMER_SET_TIME)
+  {
+    display.setFont(&FreeSans9pt7b);
+    display.setCursor(25, 45);
+    display_time(time_keep[OPEN_TIME_LAST_CHANCE]);
+  }
+  else if (screen == CHANGE_LANGUAGE)
   {
     display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
     display.display();
@@ -621,7 +646,8 @@ void draw_text(uint8_t*  time_to_print)
     display.setTextColor(BLACK);
     display.print("English (UK)");
     display.display();
-  } else if (screen == FIRMWARE_VERSION)
+  }
+  else if (screen == FIRMWARE_VERSION)
   {
     display.setFont(&FreeSans9pt7b);
 
@@ -629,7 +655,8 @@ void draw_text(uint8_t*  time_to_print)
     display.setTextColor(WHITE);
     display.print("1.0");
     display.display();
-  } else if (screen == SERIAL_NUMBER)
+  }
+  else if (screen == SERIAL_NUMBER)
   {
     display.setFont(&FreeSans9pt7b);
 
@@ -646,7 +673,8 @@ void draw_text(uint8_t*  time_to_print)
     display.setTextColor(WHITE);
     display.print("Test Mode Running");
     display.display();
-  } else if ((screen == REBOOT) || (screen == REBOOT_SUBMENU))
+  }
+  else if ((screen == REBOOT) || (screen == REBOOT_SUBMENU))
   {
     screen = REBOOT_SUBMENU;
     entered_scroll_page_reboot = true;
@@ -1021,6 +1049,18 @@ void NEXT_SCREEN()
       Serial.println("Playing Sound");
       //      playSample(farmSound, farmSoundSize);
     }
+    else if ((screen == LAST_CHANCE_SUBMENU) && (state == ENTERED))
+    {
+
+      if (chance_position == 0)
+      {
+        display.clearDisplay();
+        display.display();
+
+        screen = LAST_CHANCE_TIMER_SET_TIME;
+        print_screen(screen);
+      }
+    }
     else if ((screen == CHANGE_STATUS_SUBMENU) && (state == ENTERED))
     {
       selected_status = status_menu[status_position];
@@ -1062,7 +1102,7 @@ void NEXT_SCREEN()
 
     Serial.println("NEXT");
 
-    if ((!entered_scroll_page_main) && (!entered_scroll_page_lastChance))
+    if ((!entered_scroll_page_main))
     {
       state = ENTERED;
     }
@@ -1148,6 +1188,15 @@ void BACK_SCREEN()
       entered_scroll_page_main = true;
       print_screen(screen);
     }
+    else if (screen ==  LAST_CHANCE_TIMER_SET_TIME)
+    {
+      display.clearDisplay();
+      display.display();
+
+      screen = LAST_CHANCE_SUBMENU;
+      entered_scroll_page_lastChance = true;
+      print_screen(screen);
+    }
     else if (screen == REBOOT_SUBMENU)
     {
       yes_no_position = 0;
@@ -1191,7 +1240,7 @@ void BACK_SCREEN()
       print_screen(screen);
     }
 
-    if (!entered_scroll_page_device)
+    if (!entered_scroll_page_device && !entered_scroll_page_lastChance)
     {
       state = OUTSIDE;
     }
@@ -1245,23 +1294,28 @@ void UP_SCREEN()
       if (screen > EIGHTH)screen = EIGHTH;
       if (position >= 12)position = 11;
 
-    } else if (entered_scroll_page_status)
+    }
+    else if (entered_scroll_page_status)
     {
       status_position++;
       if (status_position >= 3) status_position = 2;
-    } else if (entered_scroll_page_device)
+    }
+    else if (entered_scroll_page_device)
     {
       device_position++;
       if (device_position >= 2) device_position = 1;
-    } else if (entered_scroll_page_lastChance)
+    }
+    else if (entered_scroll_page_lastChance)
     {
       chance_position++;
       if (chance_position >= 2) chance_position = 1;
-    } else if (entered_scroll_page_reboot)
+    }
+    else if (entered_scroll_page_reboot)
     {
       yes_no_position++;
       if (yes_no_position >= 2) yes_no_position = 1;
-    } else if (entered_scroll_page_power_off)
+    }
+    else if (entered_scroll_page_power_off)
     {
       yes_no_position++;
       if (yes_no_position >= 2) yes_no_position = 1;
