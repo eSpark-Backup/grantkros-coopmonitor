@@ -112,6 +112,7 @@ uint8_t entered_scroll_page_reboot = false;
 uint8_t entered_scroll_page_power_off = false;
 uint32_t print_tick = 0;
 uint8_t battery_pc = 100;
+uint8_t last_battery_pc = 100;
 uint8_t battery_icon = BATTERY_FULL;
 uint8_t last_battery_icon = BATTERY_FULL;
 
@@ -150,8 +151,10 @@ void print_last_chance_menu();
 uint8_t adjust_menu_index();
 void setRTCTime(uint8_t temp_screen);
 void adjust_12_hours_format(uint8_t temp_screen);
-void print_battery_status();
+void print_battery_icon();
+void print_battery_pc();
 void clear_battery_icon();
+void clear_battery_pc();
 void get_battery_status();
 
 void setup() {
@@ -195,12 +198,18 @@ void setup() {
 
 void loop() {
 
-  //  get_battery_status();
+  // Update battery percentage if changed
+  if ((last_battery_pc != battery_pc))
+  {
+    last_battery_pc = battery_pc;
+    print_battery_pc();
+  }
 
+  // Update battery icon if changed
   if ((last_battery_icon != battery_icon))
   {
     last_battery_icon = battery_icon;
-    print_battery_status();
+    print_battery_icon();
   }
 
   if (switched == true)
@@ -328,12 +337,32 @@ void loop() {
 
 void print_screen(uint8_t screens)
 {
-  print_battery_status();
+  print_battery_pc();
+  print_battery_icon();
   draw_bg(screens);
   draw_text(time_keep[screens]);
 }
 
-void print_battery_status()
+void print_battery_pc()
+{
+  clear_battery_pc();
+
+  display.setTextColor(WHITE);
+  display.setFont(&FreeSans5pt7b);
+  display.setCursor(display.width() - BATTERY_WIDTH - 25, 7);
+
+  // Pad extra zero if battery < 10
+  if (battery_pc >= 10)
+  {
+    display.print(String(battery_pc)); display.print("%");
+  } else {
+    display.print(0); display.print(battery_pc); display.print("%");
+  }
+
+  display.display();
+}
+
+void print_battery_icon()
 {
   clear_battery_icon();
 
@@ -361,10 +390,14 @@ void get_battery_status()
   }
 }
 
+void clear_battery_pc()
+{
+  display.fillRect(display.width() - BATTERY_WIDTH - 25, -1, 25, BATTERY_HEIGHT - 2, BLACK);
+}
+
 void clear_battery_icon()
 {
   display.fillRect(display.width() - BATTERY_WIDTH, -1, BATTERY_WIDTH, BATTERY_HEIGHT - 2, BLACK);
-  display.display();
 }
 
 void update_time(uint8_t* time_to_print)
