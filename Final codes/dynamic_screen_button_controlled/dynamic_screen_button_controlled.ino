@@ -26,6 +26,9 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define LOGO_HEIGHT   65
 #define LOGO_WIDTH    129
 
+#define BATTERY_WIDTH 17
+#define BATTERY_HEIGHT 11
+
 #define CURRENT_TIME 0
 #define OPEN_TIME 1
 #define CLOSE_TIME 2
@@ -83,6 +86,10 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define HIGHLIGHTER_LEN 20
 #define SPACING 6
 
+#define BATTERY_FULL 0
+#define BATTERY_HALF 1
+#define BATTERY_DEAD 2
+
 uint8_t state = OUTSIDE;
 uint8_t previous_state = OUTSIDE;
 uint8_t time_keep[TIME_TYPES][TIME_DIMENSIONS] = {0};
@@ -104,6 +111,9 @@ uint8_t entered_scroll_page_lastChance = false;
 uint8_t entered_scroll_page_reboot = false;
 uint8_t entered_scroll_page_power_off = false;
 uint32_t print_tick = 0;
+uint8_t battery_pc = 100;
+uint8_t battery_icon = BATTERY_FULL;
+uint8_t last_battery_icon = BATTERY_FULL;
 
 RTCZero rtc;
 
@@ -139,6 +149,8 @@ void print_last_chance_menu();
 uint8_t adjust_menu_index();
 void setRTCTime(uint8_t temp_screen);
 void adjust_12_hours_format(uint8_t temp_screen);
+void print_battery_status();
+void clear_battery_icon();
 
 void setup() {
   Serial.begin(115200);
@@ -304,8 +316,43 @@ void loop() {
 
 void print_screen(uint8_t screens)
 {
+  print_battery_status();
   draw_bg(screens);
   draw_text(time_keep[screens]);
+}
+
+void print_battery_status()
+{
+
+  clear_battery_icon();
+
+  if (battery_pc <= 10)
+  {
+    display.drawBitmap(display.width() - BATTERY_WIDTH,
+                       -1,
+                       epd_bitmap_dead_01 , BATTERY_WIDTH, BATTERY_HEIGHT, 1);
+    display.display();
+    
+  } else if (battery_pc <= 50)
+  {
+    display.drawBitmap(display.width() - BATTERY_WIDTH,
+                       -1,
+                       epd_bitmap_50__01 , BATTERY_WIDTH, BATTERY_HEIGHT, 1);
+    display.display();
+
+  } else if (battery_pc <= 100)
+  {
+    display.drawBitmap(display.width() - BATTERY_WIDTH,
+                       -1,
+                       epd_bitmap_full_01 , BATTERY_WIDTH, BATTERY_HEIGHT, 1);
+    display.display();
+  }
+}
+
+void clear_battery_icon()
+{
+  display.fillRect(display.width() - BATTERY_WIDTH, -1, BATTERY_WIDTH, BATTERY_HEIGHT, BLACK);
+  display.display();
 }
 
 void update_time(uint8_t* time_to_print)
@@ -390,21 +437,21 @@ void draw_bg(uint8_t screens)
     display.drawBitmap(
       (display.width()  - LOGO_WIDTH ) / 2,
       (display.height() - LOGO_HEIGHT) / 2,
-      epd_bitmap_Set_Current_Time__New__01, LOGO_WIDTH, LOGO_HEIGHT, 1);
+      epd_bitmap_Set_Current_Time_01, LOGO_WIDTH, LOGO_HEIGHT, 1);
     display.display();
   } else if (screens == SECOND)
   {
     display.drawBitmap(
       (display.width()  - LOGO_WIDTH ) / 2,
       (display.height() - LOGO_HEIGHT) / 2,
-      epd_bitmap_Set_Open_Time_New__01, LOGO_WIDTH, LOGO_HEIGHT, 1);
+      epd_bitmap_Set_Open_Time_01, LOGO_WIDTH, LOGO_HEIGHT, 1);
     display.display();
   } else if (screens == THIRD)
   {
     display.drawBitmap(
       (display.width()  - LOGO_WIDTH ) / 2,
       (display.height() - LOGO_HEIGHT) / 2,
-      epd_bitmap_Set_Close_Time_New__01, LOGO_WIDTH, LOGO_HEIGHT, 1);
+      epd_bitmap_Set_Close_Time_01, LOGO_WIDTH, LOGO_HEIGHT, 1);
     display.display();
   } else if (screens == FOURTH)
   {
