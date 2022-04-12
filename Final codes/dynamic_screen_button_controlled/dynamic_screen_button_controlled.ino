@@ -82,8 +82,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 #define LAST_CHANCE_TIMER 50
 #define LAST_CHANCE_TIMER_SET_TIME (LAST_CHANCE_TIMER + 1)
-#define LAST_CHANCE_TIMER_5_MINS (LAST_CHANCE_TIMER + 2)
-#define LAST_CHANCE_TIMER_10_MINS (LAST_CHANCE_TIMER + 3)
+#define LAST_CHANCE_TIMER_MINS (LAST_CHANCE_TIMER + 2)
 
 #define HIGHLIGHTER_LEN_MENU 128
 #define HIGHLIGHTER_HEIGHT_MENU 10
@@ -103,6 +102,7 @@ uint8_t status_position = 0;
 uint8_t device_position = 0;
 uint8_t chance_position = 0;
 uint8_t yes_no_position = 0;
+uint8_t mins_position = 0;
 uint8_t menu_count = 0;
 uint8_t screen = 0;
 uint8_t last_screen = 0;
@@ -114,6 +114,7 @@ uint8_t entered_scroll_page_device = false;
 uint8_t entered_scroll_page_lastChance = false;
 uint8_t entered_scroll_page_reboot = false;
 uint8_t entered_scroll_page_power_off = false;
+uint8_t entered_scroll_page_mins = false;
 uint32_t print_tick = 0;
 uint8_t battery_pc = 100;
 uint8_t last_battery_pc = 100;
@@ -134,6 +135,7 @@ char status_menu[][64] = {"PAUSE", "AUTOMATIC", "MANUAL"};
 char device_menu[][64] = {"Firmware Version", "Serial Number"};
 char yes_no[][64] = {"Yes", "No"};
 char chance_menu[][64] = {"Turn on", "Turn off"};
+char mins_menu[][64] = {"5 mins", "10 mins", "15 mins"};
 char* selected_status = "AUTOMATIC";
 
 
@@ -152,6 +154,7 @@ void print_status_menu();
 void print_devce_information();
 void print_yes_no();
 void print_last_chance_menu();
+void print_mins_menu();
 uint8_t adjust_menu_index();
 void setRTCTime(uint8_t temp_screen);
 void adjust_12_hours_format(uint8_t temp_screen);
@@ -262,7 +265,7 @@ void loop() {
       switched = false;
     }
 
-    if ((state == OUTSIDE) || (entered_scroll_page_main) || (entered_scroll_page_status) || (entered_scroll_page_device) || (entered_scroll_page_lastChance) || (entered_scroll_page_reboot) || (entered_scroll_page_power_off))
+    if ((state == OUTSIDE) || (entered_scroll_page_main) || (entered_scroll_page_status) || (entered_scroll_page_device) || (entered_scroll_page_lastChance) || (entered_scroll_page_reboot) || (entered_scroll_page_power_off) || (entered_scroll_page_mins))
     {
       if (screen <= FIFTH)
       {
@@ -325,6 +328,12 @@ void loop() {
     Serial.println("Scroll page last power off");
     Serial.println(entered_scroll_page_power_off);
 
+    Serial.println("Scroll page mins");
+    Serial.println(entered_scroll_page_mins);
+
+    Serial.println("Current screen");
+    Serial.println(screen);
+
     if ((rtc.getHours() > time_keep[OPEN_TIME][HOURS]) && (rtc.getHours() < time_keep[CLOSE_TIME][HOURS]))
     {
       Serial.println("Door is opened");
@@ -350,7 +359,6 @@ void loop() {
     print_tick = millis();
 
   }
-
 }
 
 void print_screen(uint8_t screens)
@@ -560,7 +568,7 @@ void draw_bg(uint8_t screens)
       epd_bitmap_Serial_Number_01, LOGO_WIDTH, LOGO_HEIGHT, 1);
     display.display();
   }
-  else if (screens == LAST_CHANCE_SUBMENU)
+  else if ((screens == LAST_CHANCE_SUBMENU) || (screens == LAST_CHANCE_TIMER_MINS))
   {
     display.drawBitmap(
       (display.width()  - LOGO_WIDTH ) / 2,
@@ -659,7 +667,11 @@ void draw_text(uint8_t*  time_to_print)
     entered_scroll_page_lastChance = true;
     print_last_chance_menu();
   }
-
+  else if (screen == LAST_CHANCE_TIMER_MINS)
+  {
+    entered_scroll_page_mins = true;
+    print_mins_menu();
+  }
   else if (screen == CHANGE_LANGUAGE)
   {
     display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
@@ -845,6 +857,47 @@ void print_status_menu()
   display.display();
 }
 
+void print_mins_menu()
+{
+  display.fillRect(0, 12, 128, 43, BLACK);
+  display.display();
+
+  if (mins_position == 0)
+  {
+    display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+  }
+  else if (mins_position == 1)
+  {
+    display.fillRect(6, 22, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+  }
+  else if (mins_position == 2)
+  {
+    display.fillRect(6, 34, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
+    display.display();
+  }
+
+  display.setFont(&FreeSans5pt7b);
+  display.setTextColor(WHITE);
+
+  display.setCursor(6, 18);
+  display.setTextColor(mins_position == 0 ? BLACK : WHITE);
+  display.print(mins_menu[0]);
+  display.display();
+
+  display.setCursor(6, 30);
+  display.setTextColor(mins_position == 1 ? BLACK : WHITE);
+  display.print(mins_menu[1]);
+  display.display();
+
+  display.setCursor(6, 42);
+  display.setTextColor(mins_position == 2 ? BLACK : WHITE);
+  display.print(mins_menu[2]);
+  display.display();
+
+}
+
 void print_menu()
 {
   display.fillRect(0, 12, 128, 43, BLACK);
@@ -1015,13 +1068,13 @@ void NEXT_SCREEN()
     if (state == ENTERED)
       time_position++;
 
-    if (time_position >= 3)
+    if ((time_position >= 3) && (screen != LAST_CHANCE_TIMER_SET_TIME))
     {
       time_position = 0;
     }
 
     // Print new screen, include main and menu screens
-    if (((screen == FOURTH) && (!entered_scroll_page_main)) || ((screen >= FIFTH) && (screen <  POWER_OFF_SUBMENU)))
+    if (((screen == FOURTH) && (!entered_scroll_page_main)) || ((screen >= FIFTH) && (screen <  POWER_OFF_SUBMENU)) || (screen >= LAST_CHANCE_TIMER))
     {
 
       // Main menu print
@@ -1033,7 +1086,7 @@ void NEXT_SCREEN()
         screen = position + MENU;
         print_screen(screen);
       }
-      else if ((screen >= SUBMENU) && (screen < POWER_OFF_SUBMENU))
+      else if (((screen >= SUBMENU) && (screen < POWER_OFF_SUBMENU)) || (screen >= LAST_CHANCE_TIMER))
       {
         switch (screen)
         {
@@ -1055,9 +1108,22 @@ void NEXT_SCREEN()
 
             }
             break;
+
+          case LAST_CHANCE_TIMER_SET_TIME:
+            Serial.println(time_position);
+            if (time_position > AM_PM)
+            {
+              screen = LAST_CHANCE_TIMER_MINS;
+
+              display.clearDisplay();
+              display.display();
+
+              print_screen(LAST_CHANCE_TIMER_MINS);
+            }
+            break;
         }
       }
-      else
+      else if (screen < FIFTH)
       {
         display.clearDisplay();
         display.display();
@@ -1241,6 +1307,14 @@ void BACK_SCREEN()
       screen = LAST_CHANCE_SUBMENU;
       entered_scroll_page_lastChance = true;
       print_screen(screen);
+    } else if (screen ==  LAST_CHANCE_TIMER_MINS)
+    {
+      display.clearDisplay();
+      display.display();
+
+      screen = LAST_CHANCE_TIMER_SET_TIME;
+      entered_scroll_page_mins = false;
+      print_screen(screen);
     }
     else if (screen == REBOOT_SUBMENU)
     {
@@ -1306,7 +1380,7 @@ void UP_SCREEN()
     // Correct array index if screen >= MENU
     temp_screen = adjust_menu_index();
 
-    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device && !entered_scroll_page_lastChance && !entered_scroll_page_reboot && !entered_scroll_page_power_off)
+    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device && !entered_scroll_page_lastChance && !entered_scroll_page_reboot && !entered_scroll_page_power_off && !entered_scroll_page_mins)
     {
       if (state == ENTERED)
       {
@@ -1364,9 +1438,13 @@ void UP_SCREEN()
     {
       yes_no_position++;
       if (yes_no_position >= 2) yes_no_position = 1;
+    } else if (entered_scroll_page_mins)
+    {
+      mins_position++;
+      if (mins_position >= 3) mins_position = 2;
     }
 
-    // Indicate pressign of up/down button
+    // Indicate pressing of up/down button
     switched = true;
 
 
@@ -1386,7 +1464,7 @@ void DOWN_SCREEN()
     // Correct array index if screen >= MENU
     temp_screen = adjust_menu_index();
 
-    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device && !entered_scroll_page_lastChance && !entered_scroll_page_reboot && !entered_scroll_page_power_off)
+    if (!entered_scroll_page_main && !entered_scroll_page_status && !entered_scroll_page_device && !entered_scroll_page_lastChance && !entered_scroll_page_reboot && !entered_scroll_page_power_off && !entered_scroll_page_mins)
     {
       if (state == ENTERED)
       {
@@ -1438,6 +1516,10 @@ void DOWN_SCREEN()
     {
       yes_no_position--;
       if (yes_no_position >= 2) yes_no_position = 0;
+    } else if (entered_scroll_page_mins)
+    {
+      mins_position--;
+      if (mins_position >= 3) mins_position = 0;
     }
 
     // Indicate pressign of up/down button
