@@ -220,13 +220,14 @@ void loop() {
   {
     if (state == ENTERED)
     {
-      if ((screen < FOURTH) && (screen >= FIRST) || ((screen >= (MENU + 0)) && (screen < (MENU + 3))))
+      if (((screen < FOURTH) && (screen >= FIRST)) || ((screen >= (MENU + 0)) && (screen < (MENU + 3))) || (screen == LAST_CHANCE_TIMER_SET_TIME))
       {
         uint8_t temp_screen = 0;
         if (screen < FOURTH)
         {
           temp_screen = screen;
-        } else if ((screen >= (MENU + 0)) && (screen < (MENU + 3)))
+        }
+        else if ((screen >= (MENU + 0)) && (screen < (MENU + 3)))
         {
           switch (screen)
           {
@@ -243,6 +244,18 @@ void loop() {
               break;
           }
         }
+        else if ((screen >= LAST_CHANCE_TIMER))
+        {
+          switch (screen)
+          {
+            case LAST_CHANCE_TIMER_SET_TIME:
+              temp_screen = OPEN_TIME_LAST_CHANCE;
+              break;
+          }
+        }
+
+        Serial.println("temp_screen");
+        Serial.println(temp_screen);
         update_time(time_keep[temp_screen]);
       }
 
@@ -902,6 +915,10 @@ uint8_t adjust_menu_index()
       case (MENU + 1):
         temp_screen = CLOSE_TIME;
         break;
+
+      case (LAST_CHANCE_TIMER_SET_TIME):
+        temp_screen = OPEN_TIME_LAST_CHANCE;
+        break;
     }
   }
 
@@ -1022,6 +1039,7 @@ void NEXT_SCREEN()
         {
           case LAST_CHANCE_SUBMENU:
             time_position = 0;
+            entered_scroll_page_lastChance = false;
             if (chance_position == 0)
             {
               display.clearDisplay();
@@ -1030,7 +1048,6 @@ void NEXT_SCREEN()
               last_chance_open_state = true;
               screen = LAST_CHANCE_TIMER_SET_TIME;
               print_screen(screen);
-              last_chance_open_state = true;
             }
             else if (chance_position == 1)
             {
@@ -1044,13 +1061,13 @@ void NEXT_SCREEN()
       {
         display.clearDisplay();
         display.display();
-        
+
         print_screen(++screen);
       }
 
       // Set flag to indicate that scroll page has entered
       entered_scroll_page_main = (screen == FIFTH) ? true : false;
-      
+
     }
 
     // Respond to each button click for each menu/submenu
