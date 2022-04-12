@@ -119,6 +119,7 @@ uint8_t battery_pc = 100;
 uint8_t last_battery_pc = 100;
 uint8_t battery_icon = BATTERY_FULL;
 uint8_t last_battery_icon = BATTERY_FULL;
+uint8_t last_chance_open_state = false;
 
 RTCZero rtc;
 
@@ -279,6 +280,7 @@ void loop() {
     }
   }
 
+  // Print diagnostic messages
   if ((millis() - print_tick) > 2000)
   {
     get_battery_status();
@@ -340,10 +342,17 @@ void loop() {
 
 void print_screen(uint8_t screens)
 {
+  uint8_t draw_text_screen = 0;
+
+  if (screens > OPEN_TIME_LAST_CHANCE)
+  {
+    draw_text_screen = 0;
+  }
+
   print_battery_pc();
   print_battery_icon();
   draw_bg(screens);
-  draw_text(time_keep[screens]);
+  draw_text(time_keep[draw_text_screen]);
 }
 
 void print_battery_pc()
@@ -538,6 +547,14 @@ void draw_bg(uint8_t screens)
       epd_bitmap_Serial_Number_01, LOGO_WIDTH, LOGO_HEIGHT, 1);
     display.display();
   }
+  else if (screens == LAST_CHANCE_SUBMENU)
+  {
+    display.drawBitmap(
+      (display.width()  - LOGO_WIDTH ) / 2,
+      (display.height() - LOGO_HEIGHT) / 2,
+      epd_bitmap_Last_Chance___1_01, LOGO_WIDTH, LOGO_HEIGHT, 1);
+    display.display();
+  }
   else if (screens == LAST_CHANCE_TIMER_SET_TIME)
   {
     display.drawBitmap(
@@ -629,12 +646,7 @@ void draw_text(uint8_t*  time_to_print)
     entered_scroll_page_lastChance = true;
     print_last_chance_menu();
   }
-  else if (screen == LAST_CHANCE_TIMER_SET_TIME)
-  {
-    display.setFont(&FreeSans9pt7b);
-    display.setCursor(25, 45);
-    display_time(time_keep[OPEN_TIME_LAST_CHANCE]);
-  }
+
   else if (screen == CHANGE_LANGUAGE)
   {
     display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
@@ -992,32 +1004,56 @@ void NEXT_SCREEN()
     }
 
     // Print new screen, include main and menu screens
-
-    if (((screen == FOURTH) && (!entered_scroll_page_main)) || ((screen >= FIFTH) && (screen <  SUBMENU)))
+    if (((screen == FOURTH) && (!entered_scroll_page_main)) || ((screen >= FIFTH) && (screen <  POWER_OFF_SUBMENU)))
     {
-      display.clearDisplay();
-      display.display();
 
-      if (screen >= FIFTH)
+      // Main menu print
+      if ((screen >= FIFTH) && (screen < SUBMENU))
       {
+        display.clearDisplay();
+        display.display();
+
         screen = position + MENU;
         print_screen(screen);
       }
-      else {
+      else if ((screen >= SUBMENU) && (screen < POWER_OFF_SUBMENU))
+      {
+        switch (screen)
+        {
+          case LAST_CHANCE_SUBMENU:
+            time_position = 0;
+            if (chance_position == 0)
+            {
+              display.clearDisplay();
+              display.display();
+
+              last_chance_open_state = true;
+              screen = LAST_CHANCE_TIMER_SET_TIME;
+              print_screen(screen);
+              last_chance_open_state = true;
+            }
+            else if (chance_position == 1)
+            {
+              last_chance_open_state =  false;
+
+            }
+            break;
+        }
+      }
+      else
+      {
+        display.clearDisplay();
+        display.display();
+        
         print_screen(++screen);
       }
 
       // Set flag to indicate that scroll page has entered
       entered_scroll_page_main = (screen == FIFTH) ? true : false;
-
-      if (screen < FIFTH)
-      {
-        time_position = 0;
-      }
+      
     }
 
     // Respond to each button click for each menu/submenu
-
     if ((screen < FOURTH) && (screen >= FIRST))
     {
       update_time(time_keep[screen]);
@@ -1049,17 +1085,9 @@ void NEXT_SCREEN()
       Serial.println("Playing Sound");
       //      playSample(farmSound, farmSoundSize);
     }
-    else if ((screen == LAST_CHANCE_SUBMENU) && (state == ENTERED))
+    else if ((screen == LAST_CHANCE_TIMER_SET_TIME) && (state == ENTERED))
     {
-
-      if (chance_position == 0)
-      {
-        display.clearDisplay();
-        display.display();
-
-        screen = LAST_CHANCE_TIMER_SET_TIME;
-        print_screen(screen);
-      }
+      update_time(time_keep[OPEN_TIME_LAST_CHANCE]);
     }
     else if ((screen == CHANGE_STATUS_SUBMENU) && (state == ENTERED))
     {
