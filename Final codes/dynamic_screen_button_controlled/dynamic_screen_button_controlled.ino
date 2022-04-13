@@ -672,6 +672,7 @@ void draw_text(uint8_t*  time_to_print)
     entered_scroll_page_mins = true;
     print_mins_menu();
   }
+  
   else if (screen == CHANGE_LANGUAGE)
   {
     display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
@@ -1118,7 +1119,7 @@ void NEXT_SCREEN()
               display.clearDisplay();
               display.display();
 
-              print_screen(LAST_CHANCE_TIMER_MINS);
+              print_screen(screen);
             }
             break;
         }
@@ -1315,6 +1316,7 @@ void BACK_SCREEN()
       screen = LAST_CHANCE_TIMER_SET_TIME;
       entered_scroll_page_mins = false;
       print_screen(screen);
+      update_time(time_keep[OPEN_TIME_LAST_CHANCE]);
     }
     else if (screen == REBOOT_SUBMENU)
     {
