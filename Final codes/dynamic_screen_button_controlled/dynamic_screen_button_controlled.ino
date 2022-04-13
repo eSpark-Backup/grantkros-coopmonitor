@@ -84,9 +84,9 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define LAST_CHANCE_TIMER_SET_TIME (LAST_CHANCE_TIMER + 1)
 #define LAST_CHANCE_TIMER_MINS (LAST_CHANCE_TIMER + 2)
 
-#define MINS_5 60
-#define MINS_10 61
-#define MINS_15 62
+#define MINS_5 0
+#define MINS_10 1
+#define MINS_15 2
 
 #define HIGHLIGHTER_LEN_MENU 128
 #define HIGHLIGHTER_HEIGHT_MENU 10
@@ -126,6 +126,7 @@ uint8_t battery_icon = BATTERY_FULL;
 uint8_t last_battery_icon = BATTERY_FULL;
 uint8_t last_chance_open_state = false;
 uint8_t last_chance_mins = 0;
+uint8_t door_state = false;
 
 RTCZero rtc;
 
@@ -168,6 +169,7 @@ void print_battery_pc();
 void clear_battery_icon();
 void clear_battery_pc();
 void get_battery_status();
+void convert_to_hh_mm(uint8_t* temp_mins, uint8_t* temp_hours);
 
 void setup() {
   Serial.begin(115200);
@@ -339,31 +341,113 @@ void loop() {
     Serial.println("Current screen");
     Serial.println(screen);
 
+    // Open/Close door checking regular open/close time
     if ((rtc.getHours() > time_keep[OPEN_TIME][HOURS]) && (rtc.getHours() < time_keep[CLOSE_TIME][HOURS]))
     {
-      Serial.println("Door is opened");
+      door_state =  true;
+      //      Serial.println("Door is opened");
 
     } else if ((rtc.getHours() == time_keep[OPEN_TIME][HOURS]))
     {
       if ((rtc.getMinutes() >= time_keep[OPEN_TIME][MINUTES]) && (rtc.getMinutes() < time_keep[CLOSE_TIME][MINUTES]))
       {
-        Serial.println("Door is opened");
+        door_state = true;
+        //        Serial.println("Door is opened");
       } else if (rtc.getMinutes() >= time_keep[CLOSE_TIME][MINUTES])
       {
-        Serial.println("Door is closed");
+        door_state = false;
+        //        Serial.println("Door is closed");
       }
       else if (rtc.getMinutes() < time_keep[OPEN_TIME][MINUTES])
       {
-        Serial.println("Door is closed");
+        door_state = false;
+        //        Serial.println("Door is closed");
       }
     } else
     {
-      Serial.println("Door is closed");
+      door_state = false;
+      //      Serial.println("Door is closed");
     }
+
+    uint8_t new_mins, new_hours = 0;
+    // Convert Last chance open time window to HH:MM
+    convert_to_hh_mm(&new_mins, &new_hours);
+
+    Serial.println("New hours");
+    Serial.println(new_hours);
+
+    Serial.println("New mins");
+    Serial.println(new_mins);
+
+    Serial.println("lat chance hours");
+    Serial.println(time_keep[OPEN_TIME_LAST_CHANCE][HOURS]);
+
+    Serial.println("last chance mins");
+    Serial.println(time_keep[OPEN_TIME_LAST_CHANCE][MINUTES]);
+
+    // Open/Close door checking last chance open time
+    if ((rtc.getHours() > time_keep[OPEN_TIME_LAST_CHANCE][HOURS]) && (rtc.getHours() < new_hours))
+    {
+      door_state =  true;
+      //      Serial.println("Door is opened");
+
+    } else if ((rtc.getHours() == time_keep[OPEN_TIME_LAST_CHANCE][HOURS]))
+    {
+      if ((rtc.getMinutes() >= time_keep[OPEN_TIME_LAST_CHANCE][MINUTES]) && (rtc.getMinutes() < new_mins))
+      {
+        door_state =  true;
+        //        Serial.println("Door is opened");
+      } else if (rtc.getMinutes() >= new_mins)
+      {
+        door_state =  false;
+        //        Serial.println("Door is closed");
+      }
+    }
+
+    Serial.println("Door state");
+    Serial.println(door_state ? "Openeed" : "Closed");
 
     print_tick = millis();
 
   }
+}
+
+void convert_to_hh_mm(uint8_t* temp_mins, uint8_t* temp_hours)
+{
+  uint8_t add_mins = 0;
+  //  uint8_t temp_mins, temp_hours = 0;
+
+  switch (last_chance_mins)
+  {
+    case MINS_5:
+      add_mins = 5;
+      break;
+
+    case MINS_10:
+      add_mins = 10;
+      break;
+
+    case MINS_15:
+      add_mins = 15;
+      break;
+  }
+
+  *temp_mins = time_keep[OPEN_TIME_LAST_CHANCE][MINUTES] + add_mins;
+
+  if (*temp_mins >= 60)
+  {
+    *temp_mins -= 60;
+    *temp_hours = time_keep[OPEN_TIME_LAST_CHANCE][HOURS] + 1;
+  } else
+  {
+    *temp_hours = time_keep[OPEN_TIME_LAST_CHANCE][HOURS];
+  }
+
+  if (*temp_hours > 12)
+  {
+    *temp_hours = 1;
+  }
+
 }
 
 void print_screen(uint8_t screens)
@@ -373,6 +457,9 @@ void print_screen(uint8_t screens)
   if (screens > OPEN_TIME_LAST_CHANCE)
   {
     draw_text_screen = 0;
+  }
+  else {
+    draw_text_screen = screens;
   }
 
   print_battery_pc();
@@ -1039,10 +1126,10 @@ void adjust_12_hours_format(uint8_t temp_screen)
 void setRTCTime(uint8_t temp_screen)
 {
   // Set RTC TIME
-  if (time_keep[temp_screen][HOURS] == 1)
+  if (time_keep[temp_screen][AM_PM] == 1)
   {
     rtc.setHours(time_keep[screen][HOURS] + 12);
-  } else if (time_keep[temp_screen][2] == 0)
+  } else if (time_keep[temp_screen][AM_PM] == 0)
   {
     rtc.setHours(time_keep[temp_screen][HOURS]);
   }
@@ -1415,7 +1502,7 @@ void UP_SCREEN()
 
         adjust_12_hours_format(temp_screen);
 
-        // set Current Time
+        // set Current RTC Time
         if (screen == CURRENT_TIME)
         {
           setRTCTime(temp_screen);
@@ -1498,6 +1585,12 @@ void DOWN_SCREEN()
         time_keep[temp_screen][time_position]--;
 
         adjust_12_hours_format(temp_screen);
+
+        // set Current RTC Time
+        if (screen == CURRENT_TIME)
+        {
+          setRTCTime(temp_screen);
+        }
 
       } else if (state == OUTSIDE)
       {
