@@ -84,6 +84,10 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #define LAST_CHANCE_TIMER_SET_TIME (LAST_CHANCE_TIMER + 1)
 #define LAST_CHANCE_TIMER_MINS (LAST_CHANCE_TIMER + 2)
 
+#define MINS_5 60
+#define MINS_10 61
+#define MINS_15 62
+
 #define HIGHLIGHTER_LEN_MENU 128
 #define HIGHLIGHTER_HEIGHT_MENU 10
 #define HIGHLIGHTER_LEN 20
@@ -121,6 +125,7 @@ uint8_t last_battery_pc = 100;
 uint8_t battery_icon = BATTERY_FULL;
 uint8_t last_battery_icon = BATTERY_FULL;
 uint8_t last_chance_open_state = false;
+uint8_t last_chance_mins = 0;
 
 RTCZero rtc;
 
@@ -672,7 +677,7 @@ void draw_text(uint8_t*  time_to_print)
     entered_scroll_page_mins = true;
     print_mins_menu();
   }
-  
+
   else if (screen == CHANGE_LANGUAGE)
   {
     display.fillRect(6, 12, HIGHLIGHTER_LEN_MENU, HIGHLIGHTER_HEIGHT_MENU, WHITE);
@@ -1094,18 +1099,24 @@ void NEXT_SCREEN()
           case LAST_CHANCE_SUBMENU:
             time_position = 0;
             entered_scroll_page_lastChance = false;
+
             if (chance_position == 0)
             {
               display.clearDisplay();
               display.display();
 
-              last_chance_open_state = true;
               screen = LAST_CHANCE_TIMER_SET_TIME;
               print_screen(screen);
             }
             else if (chance_position == 1)
             {
               last_chance_open_state =  false;
+
+              display.clearDisplay();
+              display.display();
+
+              screen = FIFTH;
+              print_screen(screen);
 
             }
             break;
@@ -1115,6 +1126,7 @@ void NEXT_SCREEN()
             if (time_position > AM_PM)
             {
               screen = LAST_CHANCE_TIMER_MINS;
+              state = OUTSIDE;
 
               display.clearDisplay();
               display.display();
@@ -1210,6 +1222,19 @@ void NEXT_SCREEN()
 
         LowPower.deepSleep();
       }
+    }
+    else if ((screen == LAST_CHANCE_TIMER_MINS) && (state == ENTERED))
+    {
+      last_chance_mins = mins_position;
+      last_chance_open_state = true;
+      entered_scroll_page_mins = false;
+      entered_scroll_page_main = true;
+
+      display.clearDisplay();
+      display.display();
+
+      screen = FIFTH;
+      print_screen(screen);
     }
 
     Serial.println("NEXT");
