@@ -443,9 +443,6 @@ void convert_to_hh_mm(uint8_t* temp_mins, uint8_t* temp_hours)
     *temp_hours = time_keep[OPEN_TIME_LAST_CHANCE][HOURS];
   }
 
-  // Adjust for AM PM
-  *temp_hours += time_keep[OPEN_TIME_LAST_CHANCE][AM_PM] ? 12 :  0;
-
   // Reset hours to 1 in case of greater than 12/24
   if (time_keep[OPEN_TIME_LAST_CHANCE][AM_PM] == 0)
   {
