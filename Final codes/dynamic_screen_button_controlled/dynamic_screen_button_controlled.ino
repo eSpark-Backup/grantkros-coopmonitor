@@ -314,6 +314,18 @@ void loop() {
     Serial.println("Minutes");
     Serial.println(rtc.getMinutes());
 
+    Serial.println("Open  Hours");
+    Serial.println(time_keep[OPEN_TIME][HOURS]);
+
+    Serial.println("Open Minutes");
+    Serial.println(time_keep[OPEN_TIME][MINUTES]);
+
+    Serial.println("Close Hours");
+    Serial.println(time_keep[CLOSE_TIME][HOURS]);
+
+    Serial.println("Close Minutes");
+    Serial.println(time_keep[CLOSE_TIME][MINUTES]);
+
     Serial.println("State");
     Serial.println(state);
 
@@ -347,7 +359,7 @@ void loop() {
       door_state =  true;
       //      Serial.println("Door is opened");
 
-    } else if ((rtc.getHours() == time_keep[OPEN_TIME][HOURS]))
+    } else if ((rtc.getHours() == time_keep[OPEN_TIME][HOURS]) || (rtc.getHours() == time_keep[CLOSE_TIME][HOURS]))
     {
       if ((rtc.getMinutes() >= time_keep[OPEN_TIME][MINUTES]) && (rtc.getMinutes() < time_keep[CLOSE_TIME][MINUTES]))
       {
@@ -363,7 +375,8 @@ void loop() {
         door_state = false;
         //        Serial.println("Door is closed");
       }
-    } else
+    }
+    else
     {
       door_state = false;
       //      Serial.println("Door is closed");
@@ -1154,11 +1167,11 @@ void adjust_12_hours_format(uint8_t temp_screen)
     // case AM
     case 0:
 
-      if(time_keep[temp_screen][HOURS] > 12)
+      if (time_keep[temp_screen][HOURS] > 12)
       {
         time_keep[temp_screen][HOURS] -= 12;
       }
-    
+
       if (time_keep[temp_screen][HOURS] > 12)
       {
         time_keep[temp_screen][HOURS] = 1;
@@ -1324,7 +1337,7 @@ void NEXT_SCREEN()
     else if ((screen == DOOR_SOUND_SUBMENU) && (state == ENTERED))
     {
       Serial.println("Playing Sound");
-      //      playSample(farmSound, farmSoundSize);
+      playSample(farmSound, farmSoundSize);
     }
     else if ((screen == LAST_CHANCE_TIMER_SET_TIME) && (state == ENTERED))
     {
