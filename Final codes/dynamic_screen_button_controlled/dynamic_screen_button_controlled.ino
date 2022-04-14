@@ -443,9 +443,23 @@ void convert_to_hh_mm(uint8_t* temp_mins, uint8_t* temp_hours)
     *temp_hours = time_keep[OPEN_TIME_LAST_CHANCE][HOURS];
   }
 
-  if (*temp_hours > 12)
+  // Adjust for AM PM
+  *temp_hours += time_keep[OPEN_TIME_LAST_CHANCE][AM_PM] ? 12 :  0;
+
+  // Reset hours to 1 in case of greater than 12/24
+  if (time_keep[OPEN_TIME_LAST_CHANCE][AM_PM] == 0)
   {
-    *temp_hours = 1;
+    if (*temp_hours > 12)
+    {
+      *temp_hours = 1;
+    }
+  }
+  else if (time_keep[OPEN_TIME_LAST_CHANCE][AM_PM] == 1)
+  {
+    if (*temp_hours > 24)
+    {
+      *temp_hours = 1;
+    }
   }
 
 }
@@ -528,6 +542,7 @@ void clear_battery_icon()
 void update_time(uint8_t* time_to_print)
 {
   String hours, minutes, am_pm = "";
+  uint8_t temp_pm_hours = 0;
 
   display.fillRect(0, 32, 128, HIGHLIGHTER_LEN, BLACK);
   display.display();
@@ -546,29 +561,41 @@ void update_time(uint8_t* time_to_print)
     display.display();
   }
 
+
+
+  // case PM
+  if (time_to_print[AM_PM] == 1)
+  {
+    temp_pm_hours = time_to_print[HOURS] - 12;
+  }
+  else if (time_to_print[AM_PM] == 0)
+  {
+    temp_pm_hours = time_to_print[HOURS];
+  }
+
   // 00:00 AM
   display.setFont(&FreeSans9pt7b);
   display.setCursor(25, 45);
 
-  if (time_to_print[0] < 10)
+  if (temp_pm_hours < 10)
   {
     hours = "0";
-    hours += String(time_to_print[0]);
+    hours += String(temp_pm_hours);
   } else
   {
-    hours += String(time_to_print[0]);
+    hours += String(temp_pm_hours);
   }
 
-  if (time_to_print[1] < 10)
+  if (time_to_print[MINUTES] < 10)
   {
     minutes = "0";
-    minutes += String(time_to_print[1]);
+    minutes += String(time_to_print[MINUTES]);
   } else
   {
-    minutes += String(time_to_print[1]);
+    minutes += String(time_to_print[MINUTES]);
   }
 
-  if (time_to_print[2] == 0)
+  if (time_to_print[AM_PM] == 0)
   {
     am_pm = "AM";
   } else
@@ -1073,27 +1100,38 @@ uint8_t adjust_menu_index()
 
 void display_time(uint8_t* time_to_print)
 {
+  uint8_t temp_hours;
   String hours, minutes, am_pm = "";
 
-  if (time_to_print[0] < 10)
+  if (time_to_print[AM_PM] == 1)
+  {
+    temp_hours = time_to_print[HOURS] - 12;
+  }
+  else if (time_to_print[AM_PM] == 0)
+  {
+    temp_hours = time_to_print[HOURS];
+  }
+
+
+  if (temp_hours < 10)
   {
     hours = "0";
-    hours += String(time_to_print[0]);
+    hours += String(temp_hours);
   } else
   {
-    hours += String(time_to_print[0]);
+    hours += String(temp_hours);
   }
 
-  if (time_to_print[1] < 10)
+  if (time_to_print[MINUTES] < 10)
   {
     minutes = "0";
-    minutes += String(time_to_print[1]);
+    minutes += String(time_to_print[MINUTES]);
   } else
   {
-    minutes += String(time_to_print[1]);
+    minutes += String(time_to_print[MINUTES]);
   }
 
-  if (time_to_print[2] == 0)
+  if (time_to_print[AM_PM] == 0)
   {
     am_pm = "AM";
   } else
@@ -1107,32 +1145,55 @@ void display_time(uint8_t* time_to_print)
 
 void adjust_12_hours_format(uint8_t temp_screen)
 {
-  if (time_keep[temp_screen][HOURS] > 12)
+
+  if (time_keep[temp_screen][AM_PM] >= 2)
   {
-    time_keep[temp_screen][HOURS] = 0;
+    time_keep[temp_screen][AM_PM] = 0;
+  }
+
+  switch (time_keep[temp_screen][AM_PM])
+  {
+
+    // case AM
+    case 0:
+
+      if(time_keep[temp_screen][HOURS] > 12)
+      {
+        time_keep[temp_screen][HOURS] -= 12;
+      }
+    
+      if (time_keep[temp_screen][HOURS] > 12)
+      {
+        time_keep[temp_screen][HOURS] = 1;
+      }
+      break;
+
+    // case PM
+    case 1:
+      if (time_keep[temp_screen][HOURS] < 12)
+      {
+        time_keep[temp_screen][HOURS] += 12;
+      }
+
+      if (time_keep[temp_screen][HOURS] > 24)
+      {
+        time_keep[temp_screen][HOURS] = 13;
+      }
+
+      break;
   }
 
   if (time_keep[temp_screen][MINUTES] >= 60)
   {
     time_keep[temp_screen][MINUTES] = 0;
   }
-
-  if (time_keep[temp_screen][AM_PM] >= 2)
-  {
-    time_keep[temp_screen][AM_PM] = 0;
-  }
 }
 
 void setRTCTime(uint8_t temp_screen)
 {
   // Set RTC TIME
-  if (time_keep[temp_screen][AM_PM] == 1)
-  {
-    rtc.setHours(time_keep[screen][HOURS] + 12);
-  } else if (time_keep[temp_screen][AM_PM] == 0)
-  {
-    rtc.setHours(time_keep[temp_screen][HOURS]);
-  }
+  rtc.setHours(time_keep[temp_screen][HOURS]);
+
 
   // Set RTC Minutes
   rtc.setMinutes(time_keep[temp_screen][MINUTES]);
