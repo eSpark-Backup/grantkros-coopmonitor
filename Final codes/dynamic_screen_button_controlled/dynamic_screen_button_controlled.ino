@@ -820,7 +820,7 @@ void draw_text(uint8_t*  time_to_print)
 
     display.setCursor(10, 40);
     display.setTextColor(WHITE);
-    display.print("1.0");
+    display.print("15.4.1");
     display.display();
   }
   else if (screen == SERIAL_NUMBER)
@@ -829,7 +829,7 @@ void draw_text(uint8_t*  time_to_print)
 
     display.setCursor(10, 40);
     display.setTextColor(WHITE);
-    display.print("abcxyz123");
+    display.print("5055-3010a");
     display.display();
   }
   else if (screen == TEST_MODE)
