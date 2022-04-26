@@ -127,6 +127,8 @@ uint8_t last_battery_icon = BATTERY_FULL;
 uint8_t last_chance_open_state = false;
 uint8_t last_chance_mins = 0;
 uint8_t door_state = false;
+uint8_t door_state_test_mode = false;
+uint32_t test_mode_time_tracking = 0;
 
 RTCZero rtc;
 
@@ -418,10 +420,23 @@ void loop() {
     }
 
     Serial.println("Door state");
-    Serial.println(door_state ? "Openeed" : "Closed");
+    Serial.println(door_state ? "Opened" : "Closed");
 
     print_tick = millis();
 
+  }
+
+  // Test mode
+  if (screen == TEST_MODE)
+  {
+    if ((millis() - test_mode_time_tracking) > 10000)
+    {
+      door_state_test_mode = !door_state_test_mode;
+      Serial.print("Test mode door state: ");
+      Serial.println(door_state_test_mode ? "Opened" : "Closed");
+
+      test_mode_time_tracking = millis();
+    }
   }
 }
 
@@ -840,6 +855,8 @@ void draw_text(uint8_t*  time_to_print)
     display.setTextColor(WHITE);
     display.print("Test Mode Running");
     display.display();
+
+    test_mode_time_tracking = millis();
   }
   else if ((screen == REBOOT) || (screen == REBOOT_SUBMENU))
   {
