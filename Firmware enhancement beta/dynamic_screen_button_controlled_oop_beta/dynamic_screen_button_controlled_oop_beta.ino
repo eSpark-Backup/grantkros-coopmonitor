@@ -178,44 +178,164 @@ void convert_to_hh_mm(uint8_t* temp_mins, uint8_t* temp_hours);
 class MainClass
 {
   public:
-    MainClass(const unsigned char* screen)
+    MainClass(const unsigned char* screen, uint8_t width, uint8_t height)
     {
       static_screen = screen;
+      screen_width = width;
+      screen_height = height;
     }
 
-  public:
-
+    void set_text_size(uint8_t font_size);
+    void set_text_position(uint8_t x, uint8_t y);
     void print_text();
-    void print_static();
+    void display_static();
     void print_menu();
-    void update_time();
-    void display_screen();
+    void update_time(uint8_t* time_to_update);
 
   private:
     const unsigned char* static_screen;
+    uint8_t screen_width, screen_height;
 
 };
 
 
-void MainClass::print_static()
+void MainClass::set_text_position(uint8_t x, uint8_t y)
 {
-  display.clearDisplay();
-
-  display.drawBitmap(
-    (display.width()  - 125 ) / 2,
-    (display.height() - 100) / 2,
-    static_screen, 128, 64, 1);
+  display.setCursor(x, y);
 }
 
-void MainClass::display_screen()
+void MainClass::update_time(uint8_t* time_to_print)
 {
+  String hours, minutes, am_pm = "";
+  uint8_t temp_pm_hours = 0;
+
+  display.fillRect(0, 32, 128, HIGHLIGHTER_LEN, BLACK);
+  display.display();
+
+  if (time_position == 0)
+  {
+    display.fillRect(25, 32, HIGHLIGHTER_LEN, 14, WHITE);
+    display.display();
+  } else if (time_position == 1)
+  {
+    display.fillRect(25 + HIGHLIGHTER_LEN + SPACING, 32, HIGHLIGHTER_LEN, 14, WHITE);
+    display.display();
+  } else if (time_position == 2)
+  {
+    display.fillRect(25 + 2 * HIGHLIGHTER_LEN + 2 * SPACING + 5, 32, HIGHLIGHTER_LEN + 5, 14, WHITE);
+    display.display();
+  }
+
+  // case PM
+  if (time_to_print[AM_PM] == 1)
+  {
+    temp_pm_hours = time_to_print[HOURS] - 12;
+  }
+  else if (time_to_print[AM_PM] == 0)
+  {
+    temp_pm_hours = time_to_print[HOURS];
+  }
+
+  // 00:00 AM
+  if (temp_pm_hours < 10)
+  {
+    hours = "0";
+    hours += String(temp_pm_hours);
+  } else
+  {
+    hours += String(temp_pm_hours);
+  }
+
+  if (time_to_print[MINUTES] < 10)
+  {
+    minutes = "0";
+    minutes += String(time_to_print[MINUTES]);
+  } else
+  {
+    minutes += String(time_to_print[MINUTES]);
+  }
+
+  if (time_to_print[AM_PM] == 0)
+  {
+    am_pm = "AM";
+  } else
+  {
+    am_pm = "PM";
+  }
+
+  display.setTextColor(time_position == 0 ? BLACK : WHITE);
+  display.print(hours);
+  display.display();
+
+  display.setTextColor(WHITE);
+  display.print(":");
+  display.display();
+
+  display.setTextColor(time_position == 1 ? BLACK : WHITE);
+  display.print(minutes);
+  display.display();
+
+  display.setTextColor(WHITE);
+  display.print(" ");
+  display.display();
+
+  display.setTextColor(time_position == 2 ? BLACK : WHITE);
+  display.println(am_pm);
+  display.display();
+
+  display.setTextColor(WHITE);
+}
+
+void MainClass::set_text_size(uint8_t font_size)
+{
+  switch (font_size)
+  {
+    case 3:
+      display.setFont(&FreeSans3pt7b);
+      break;
+
+    case 5:
+      display.setFont(&FreeSans5pt7b);
+      break;
+
+    case 9:
+      display.setFont(&FreeSans9pt7b);
+      break;
+  }
+}
+
+void MainClass::display_static()
+{
+  display.drawBitmap(
+    (display.width()  - screen_width ) / 2,
+    (display.height() - screen_height) / 2,
+    static_screen, screen_width, screen_height, 1);
+
   display.display();
 }
 
 void setup() {
 
   // Initialize objects
-  MainClass welcome_screen(epd_bitmap_welcome_cropped);
+  MainClass welcome_screen(epd_bitmap_welcome_cropped, 125, 100);
+  MainClass set_current_time(epd_bitmap_Set_Current_Time_01, 129, 65);
+  MainClass set_open_time(epd_bitmap_Set_Open_Time_01, 129, 65);
+  MainClass set_close_time(epd_bitmap_Set_Close_Time_01, 129, 65);
+  MainClass time_summary(epd_bitmap_time_summary_01, 129, 65);
+  MainClass settings(epd_bitmap_Settings___Page_2_01, 129, 65);
+  MainClass change_close_time(epd_bitmap_Change_Close_Time_01, 129, 65);
+  MainClass change_current_time(epd_bitmap_Change_Current_Time_01, 129, 65);
+  MainClass change_open_time(epd_bitmap_Change_Open_Time_01, 129, 65);
+  MainClass change_status(epd_bitmap_Change_Status_01, 129, 65);
+  MainClass device_information(epd_bitmap_Device_Information_01, 129, 65);
+  MainClass factory_reset(epd_bitmap_Factory_Reset___Sure_01, 129, 65);
+  MainClass change_language(epd_bitmap_Language_01, 129, 65);
+  MainClass last_chance(epd_bitmap_Last_Chance___1_01, 129, 65);
+  MainClass last_chance_open_time(epd_bitmap_LastChanceSetOpenTime, 129, 65);
+  MainClass power_off(epd_bitmap_Power_Off, 129, 65);
+  MainClass reboot(epd_bitmap_Reboot_01, 129, 65);
+  MainClass sound(epd_bitmap_Sound_01, 129, 65);
+  MainClass test_mode(epd_bitmap_Test_Mode_Running_01, 129, 65);
 
 
   Serial.begin(115200);
@@ -238,8 +358,17 @@ void setup() {
   pinMode(UP, INPUT_PULLUP);
   pinMode(DOWN, INPUT_PULLUP);
 
-  welcome_screen.print_static();
-  welcome_screen.display_screen();
+  welcome_screen.display_static();
+
+  delay(5000);
+
+  display.clearDisplay();
+  display.display();
+
+  set_current_time.set_text_size(9);
+  set_current_time.set_text_position(25, 45);
+  set_current_time.update_time(time_keep[CURRENT_TIME]);
+  set_current_time.display_static();
 
 }
 
