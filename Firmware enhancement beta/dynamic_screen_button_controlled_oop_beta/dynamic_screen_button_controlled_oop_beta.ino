@@ -180,9 +180,6 @@ class MainClass
   public:
     MainClass(const unsigned char* screen)
     {
-      display.clearDisplay();
-      display.display();
-
       static_screen = screen;
     }
 
@@ -192,7 +189,7 @@ class MainClass
     void print_static();
     void print_menu();
     void update_time();
-    void display_static();
+    void display_screen();
 
   private:
     const unsigned char* static_screen;
@@ -202,13 +199,15 @@ class MainClass
 
 void MainClass::print_static()
 {
+  display.clearDisplay();
+
   display.drawBitmap(
     (display.width()  - 125 ) / 2,
     (display.height() - 100) / 2,
     static_screen, 128, 64, 1);
 }
 
-void MainClass::display_static()
+void MainClass::display_screen()
 {
   display.display();
 }
@@ -216,7 +215,7 @@ void MainClass::display_static()
 void setup() {
 
   // Initialize objects
-  MainClass welcome_screen(epd_bitmap_Serial_Number_01);
+  MainClass welcome_screen(epd_bitmap_welcome_cropped);
 
 
   Serial.begin(115200);
@@ -240,7 +239,7 @@ void setup() {
   pinMode(DOWN, INPUT_PULLUP);
 
   welcome_screen.print_static();
-  welcome_screen.display_static();
+  welcome_screen.display_screen();
 
 }
 
