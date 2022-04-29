@@ -102,7 +102,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 uint8_t state = OUTSIDE;
 uint8_t previous_state = OUTSIDE;
 uint8_t time_keep[TIME_TYPES][TIME_DIMENSIONS] = {0};
-uint8_t time_position = 0;
+uint8_t time_position = -1;
 uint8_t position = 0;
 uint8_t status_position = 0;
 uint8_t device_position = 0;
@@ -392,10 +392,44 @@ void loop() {
 
 void NEXT_SCREEN()
 {
+  static uint32_t ticks = 0;
+  uint8_t temp_screen = 0;
+
+  if ((millis() - ticks) > DEBOUNCE)
+  {
+    Serial.println("Next");
+    Serial.println(time_position);
+
+    state = ENTERED;
+    time_position++;
+
+    time_position = (time_position > 2) ? 2 : time_position;
+
+    it->set_text_position(25, 45);
+    it->update_time(time_keep[time_screen_count]);
+
+    ticks = millis();
+  }
 }
 
 void BACK_SCREEN()
 {
+  static uint32_t ticks = 0;
+  uint8_t temp_screen = 0;
+
+  if ((millis() - ticks) > DEBOUNCE)
+  {
+    Serial.println("Back");
+    Serial.println(time_position);
+
+    state = OUTSIDE;
+    time_position = -1;
+
+    it->set_text_position(25, 45);
+    it->update_time(time_keep[time_screen_count]);
+
+    ticks = millis();
+  }
 }
 
 void UP_SCREEN()
@@ -407,25 +441,35 @@ void UP_SCREEN()
   {
     Serial.println("Up");
 
-    if (it != TimeScreens.end())
+    if (state == OUTSIDE)
     {
-      it++;
-      time_screen_count++;
-    }
+      if (it != TimeScreens.end())
+      {
+        it++;
+        time_screen_count++;
+      }
 
-    if (it == TimeScreens.end())
+      if (it == TimeScreens.end())
+      {
+        time_screen_count--;
+        it--;
+      }
+
+      display.clearDisplay();
+      display.display();
+
+      it->set_text_size(9);
+      it->set_text_position(25, 45);
+      it->display_static();
+      it->update_time(time_keep[time_screen_count]);
+    }
+    else if (state == ENTERED)
     {
-      time_screen_count--;
-      it--;
+      time_keep[time_screen_count][time_position]++;
+      adjust_12_hours_format(time_screen_count);
+      it->set_text_position(25, 45);
+      it->update_time(time_keep[time_screen_count]);
     }
-
-    display.clearDisplay();
-    display.display();
-
-    it->set_text_size(9);
-    it->set_text_position(25, 45);
-    it->display_static();
-    it->update_time(time_keep[time_screen_count]);
 
     ticks = millis();
   }
@@ -441,22 +485,79 @@ void DOWN_SCREEN()
   {
     Serial.println("Back");
 
-    if (it != TimeScreens.begin())
+    if (state == OUTSIDE)
     {
-      it--;
-      time_screen_count--;
+
+      if (it != TimeScreens.begin())
+      {
+        it--;
+        time_screen_count--;
+      }
+
+      if (time_screen_count < 0)time_screen_count = 0;
+
+      display.clearDisplay();
+      display.display();
+
+      it->set_text_size(9);
+      it->set_text_position(25, 45);
+      it->display_static();
+      it->update_time(time_keep[time_screen_count]);
+    }
+    else if (state == ENTERED)
+    {
+      time_keep[time_screen_count][time_position]--;
+      adjust_12_hours_format(time_screen_count);
+      it->set_text_position(25, 45);
+      it->update_time(time_keep[time_screen_count]);
     }
 
-    if (time_screen_count < 0)time_screen_count = 0;
-
-    display.clearDisplay();
-    display.display();
-
-    it->set_text_size(9);
-    it->set_text_position(25, 45);
-    it->display_static();
-    it->update_time(time_keep[CURRENT_TIME]);
-
     ticks = millis();
+  }
+}
+
+void adjust_12_hours_format(uint8_t temp_screen)
+{
+
+  if (time_keep[temp_screen][AM_PM] >= 2)
+  {
+    time_keep[temp_screen][AM_PM] = 0;
+  }
+
+  switch (time_keep[temp_screen][AM_PM])
+  {
+
+    // case AM
+    case 0:
+
+      if (time_keep[temp_screen][HOURS] > 12)
+      {
+        time_keep[temp_screen][HOURS] -= 12;
+      }
+
+      if (time_keep[temp_screen][HOURS] > 12)
+      {
+        time_keep[temp_screen][HOURS] = 1;
+      }
+      break;
+
+    // case PM
+    case 1:
+      if (time_keep[temp_screen][HOURS] < 12)
+      {
+        time_keep[temp_screen][HOURS] += 12;
+      }
+
+      if (time_keep[temp_screen][HOURS] > 24)
+      {
+        time_keep[temp_screen][HOURS] = 13;
+      }
+
+      break;
+  }
+
+  if (time_keep[temp_screen][MINUTES] >= 60)
+  {
+    time_keep[temp_screen][MINUTES] = 0;
   }
 }
