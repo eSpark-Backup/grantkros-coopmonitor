@@ -131,6 +131,7 @@ uint8_t last_chance_mins = 0;
 uint8_t door_state = false;
 uint8_t door_state_test_mode = false;
 uint32_t test_mode_time_tracking = 0;
+uint8_t time_screen_count = 0;
 
 RTCZero rtc;
 
@@ -147,7 +148,6 @@ char yes_no[][64] = {"Yes", "No"};
 char chance_menu[][64] = {"Turn on", "Turn off"};
 char mins_menu[][64] = {"5 mins", "10 mins", "15 mins"};
 char* selected_status = "AUTOMATIC";
-
 
 void print_screen(uint8_t screens);
 void update_time(uint8_t* time_to_print);
@@ -314,9 +314,12 @@ void MainClass::display_static()
   display.display();
 }
 
+std::list<MainClass>::iterator it;
+std::list<MainClass> TimeScreens;
+
 void setup() {
 
-  // Initialize objects
+  // Initialize objects/screens
   MainClass welcome_screen(epd_bitmap_welcome_cropped, 125, 100);
   MainClass set_current_time(epd_bitmap_Set_Current_Time_01, 129, 65);
   MainClass set_open_time(epd_bitmap_Set_Open_Time_01, 129, 65);
@@ -337,6 +340,12 @@ void setup() {
   MainClass sound(epd_bitmap_Sound_01, 129, 65);
   MainClass test_mode(epd_bitmap_Test_Mode_Running_01, 129, 65);
 
+  // Adding time screens to the list
+  TimeScreens.push_front(set_close_time);
+  TimeScreens.push_front(set_open_time);
+  TimeScreens.push_front(set_current_time);
+
+  it = TimeScreens.begin();
 
   Serial.begin(115200);
 
@@ -358,6 +367,11 @@ void setup() {
   pinMode(UP, INPUT_PULLUP);
   pinMode(DOWN, INPUT_PULLUP);
 
+  attachInterrupt(digitalPinToInterrupt(NEXT), NEXT_SCREEN, FALLING);
+  attachInterrupt(digitalPinToInterrupt(BACK), BACK_SCREEN, FALLING);
+  attachInterrupt(digitalPinToInterrupt(UP), UP_SCREEN, FALLING);
+  attachInterrupt(digitalPinToInterrupt(DOWN), DOWN_SCREEN, FALLING);
+
   welcome_screen.display_static();
 
   delay(5000);
@@ -367,11 +381,82 @@ void setup() {
 
   set_current_time.set_text_size(9);
   set_current_time.set_text_position(25, 45);
-  set_current_time.update_time(time_keep[CURRENT_TIME]);
   set_current_time.display_static();
+  set_current_time.update_time(time_keep[CURRENT_TIME]);
 
 }
 
 void loop() {
 
+}
+
+void NEXT_SCREEN()
+{
+}
+
+void BACK_SCREEN()
+{
+}
+
+void UP_SCREEN()
+{
+  static uint32_t ticks = 0;
+  uint8_t temp_screen = 0;
+
+  if ((millis() - ticks) > DEBOUNCE)
+  {
+    Serial.println("Up");
+
+    if (it != TimeScreens.end())
+    {
+      it++;
+      time_screen_count++;
+    }
+
+    if (it == TimeScreens.end())
+    {
+      time_screen_count--;
+      it--;
+    }
+
+    display.clearDisplay();
+    display.display();
+
+    it->set_text_size(9);
+    it->set_text_position(25, 45);
+    it->display_static();
+    it->update_time(time_keep[time_screen_count]);
+
+    ticks = millis();
+  }
+
+}
+
+void DOWN_SCREEN()
+{
+  static uint32_t ticks = 0;
+  uint8_t temp_screen = 0;
+
+  if ((millis() - ticks) > DEBOUNCE)
+  {
+    Serial.println("Back");
+
+    if (it != TimeScreens.begin())
+    {
+      it--;
+      time_screen_count--;
+    }
+
+    if (time_screen_count < 0)time_screen_count = 0;
+
+    display.clearDisplay();
+    display.display();
+
+    it->set_text_size(9);
+    it->set_text_position(25, 45);
+    it->display_static();
+    it->update_time(time_keep[CURRENT_TIME]);
+
+    ticks = millis();
+  }
 }
