@@ -1,0 +1,13 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [Interface-Board.PrjPcb]
+   Generated File[Interface_PCB-RoundHoles.TXT]
+   Generated File[Interface_PCB-SquareHoles.TXT]
+   Generated File[Interface_PCB.LDP]
+   Generated File[Interface_PCB.DRR]
+
+
+Files Generated   : 4
+Documents Printed : 0
+
+Finished Output Generation At 6:59:25 PM On 4/2/2022
