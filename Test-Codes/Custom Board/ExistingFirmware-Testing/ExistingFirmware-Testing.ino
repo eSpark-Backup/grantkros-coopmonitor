@@ -14,10 +14,10 @@ TwoWire myWire(&sercom2, 22, 38); //*****addition*****
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels (before : 64 )
 
-#define NEXT 7
-#define BACK 6
-#define UP 5
-#define DOWN 3
+#define NEXT 3  //PA9 = Button1 
+#define BACK 9  //PA7 = Button2
+#define UP 1    //PA10 = Button3
+#define DOWN 0  //PA11 = Button4
 
 #define DEBOUNCE 200
 
