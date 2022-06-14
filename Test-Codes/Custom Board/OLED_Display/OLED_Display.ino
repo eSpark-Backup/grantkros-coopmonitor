@@ -18,6 +18,7 @@ void setup() {
   display.clearDisplay();
   
   //Display Text
+  //Firmware Optimization Done
   display.setTextSize(1);
   display.setTextColor(WHITE);
   display.setCursor(0, 10);
